@@ -1,7 +1,7 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { ApiError, api, prop } from '../api';
 import { useProperty, useToast } from '../context';
-import { day } from '../format';
+import { addDays, day } from '../format';
 import { useApi } from '../hooks';
 import type { Reservation, Room } from '../types';
 import { Button, Select } from './ui';
@@ -19,8 +19,9 @@ export function ReservationActions({ reservation: r, onChanged, compact }: { res
   const arrival = day(r.arrival);
   const departure = day(r.departure);
   const canAssign = r.status === 'CONFIRMED' || r.status === 'CHECKED_IN';
+  useEffect(() => setRoomId(r.roomId ?? ''), [r.id, r.roomId]);
   const free = useApi(
-    () => api.get<Room[]>(prop(property.id, '/free-rooms'), { roomTypeId: r.roomTypeId, arrival, departure: r.dayUse ? day(new Date(Date.parse(arrival) + 86_400_000)) : departure, excludeReservationId: r.id }),
+    () => api.get<Room[]>(prop(property.id, '/free-rooms'), { roomTypeId: r.roomTypeId, arrival, departure: r.dayUse ? addDays(arrival, 1) : departure, excludeReservationId: r.id }),
     [property.id, r.id, r.roomTypeId, arrival, departure],
     { enabled: canAssign },
   );

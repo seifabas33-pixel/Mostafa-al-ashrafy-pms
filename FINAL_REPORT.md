@@ -10,7 +10,7 @@ to it, and for a final report. All three are in this repository:
 | Deliverable | Result |
 | --- | --- |
 | Scrubbed data | 17-page PDF extracted to `research/kwentra-research-report.md` (1,024 lines) and 14 structured JSON files in `research/data/` covering company, leadership, timeline, features, architecture, pricing and terms, compliance, partners, 30 named clients + 7 prospects, reviews, competitors, gaps, go-to-market, caveats and 36 sources |
-| Product built | A working multi-property hotel PMS: TypeScript API (46 data models, 98 documented routes), React web app (12 pages), demo seed with a Hurghada resort and a Makkah hotel, 35 passing automated tests |
+| Product built | A working multi-property hotel PMS: TypeScript API (46 data models, 98 documented routes), React web app (13 pages), demo seed with a Hurghada resort and a Makkah hotel, 35 passing automated tests |
 | Documentation | 8 documents in `docs/` (requirements with a Kwentra parity checklist, architecture, data model, compliance roadmap, pricing and terms, integration priorities, roadmap, API guide) plus this report |
 
 ## 2. How the report shaped the build
@@ -61,7 +61,25 @@ booking engine. Typecheck passes for both apps.
 
 ## 4. Web application
 
-_See section 4 addendum below._
+`apps/web` is a React 18 + Vite single-page app (about 5,000 lines of TypeScript) that speaks to the API with
+the stored key and a property switcher. Production build: 305 kB of JavaScript (90 kB gzipped), 20 kB CSS.
+Every page was rendered against the seeded data with zero JavaScript errors, at desktop and phone width.
+
+| Page | What it does |
+| --- | --- |
+| Dashboard | Live occupancy, ADR, RevPAR, room revenue and in-house guests; room status split; occupancy by room type; 14-day forecast chart; arrivals and departures with one-click check-in/out; alerts with an adjustable floor rate; refreshes every 30 s |
+| Room rack | 14-night tape chart grouped by room type; in-house, confirmed, departing and checked-out colours; unassigned stays in their own rows; out-of-order rooms hatched and toggled from the row menu; click a stay for a detail drawer with actions |
+| Reservations | Saved filters (arrivals today, departures today, in-house, upcoming), status and date filters, search; new-reservation wizard (dates → room type → live quotes per rate plan → guest); detail page with folio lines, totals, charges, payments, split and close |
+| Housekeeping | Board by floor with status and housekeeping colours; today's tasks with assign, start and done |
+| POS | Outlet picker, menu grid, cart with service and VAT, post to an occupied room or settle by cash, card or BNPL; recent orders; menu costing with food-cost % |
+| Inventory | Stock by warehouse with below-par highlighting; purchase orders with approve and receive; new-PO form |
+| Activities | Weekly programme grid with capacity and bookings; sign-ups per session; generate sessions by weekday |
+| Compliance | Required submissions for the property's regime, status table, process-pending and per-row retry, payload viewer |
+| Channels & guests | Connections with last sync and push; ARI preview; guest message queue and dispatch; reputation summary |
+| Reports | Portfolio KPIs across properties with Gregorian and Hijri period; night-audit history; run night audit |
+| Pricing | Public plans as cards, calculator across all plans, industry benchmarks and competitor starting prices from the report |
+| Booking engine | Public availability search for the active property, offers per rate plan with promo codes, direct booking |
+| Settings | API key, property list, webhook subscriptions and event catalogue, audit log |
 
 ## 5. Decisions and assumptions
 

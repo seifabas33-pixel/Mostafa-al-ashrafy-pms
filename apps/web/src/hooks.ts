@@ -24,6 +24,8 @@ export function useApi<T>(fetcher: () => Promise<T>, deps: unknown[], opts: { re
   const fetcherRef = useRef(fetcher);
   fetcherRef.current = fetcher;
   const hasData = useRef(false);
+  const lastKey = useRef<string | null>(null);
+  const depsKey = JSON.stringify(deps);
 
   const reload = useCallback(() => setTick((t) => t + 1), []);
 
@@ -33,6 +35,14 @@ export function useApi<T>(fetcher: () => Promise<T>, deps: unknown[], opts: { re
       return;
     }
     const id = ++seq.current;
+    // A change in deps is a fresh query (clear stale data); a reload/interval tick is a background refresh.
+    const fresh = lastKey.current !== depsKey;
+    lastKey.current = depsKey;
+    if (fresh) {
+      hasData.current = false;
+      setDataState(null);
+      setError(null);
+    }
     if (hasData.current) setRefreshing(true);
     else setLoading(true);
     let cancelled = false;
@@ -56,8 +66,7 @@ export function useApi<T>(fetcher: () => Promise<T>, deps: unknown[], opts: { re
     return () => {
       cancelled = true;
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [tick, enabled, ...deps]);
+  }, [tick, enabled, depsKey]);
 
   useEffect(() => {
     if (!opts.refreshMs || !enabled) return;

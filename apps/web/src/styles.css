@@ -160,6 +160,12 @@ p {
 .mt {
   margin-top: 12px;
 }
+.ml {
+  margin-left: 6px;
+}
+.mr {
+  margin-right: 4px;
+}
 .mb {
   margin-bottom: 12px;
 }
