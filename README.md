@@ -35,12 +35,12 @@ The report's Section 14 pairs each Kwentra weakness with an opening. This codeba
 ## Quick start
 
 ```bash
-npm install                 # installs both apps, generates the Prisma client
-cp apps/api/.env.example apps/api/.env
-npm run db:push             # creates the SQLite dev database
-npm run db:seed             # two demo properties (Hurghada resort, Makkah hotel) + dev API key
+npm run setup               # installs both apps, creates apps/api/.env, pushes the SQLite schema, seeds demo data
 npm run dev                 # API on :4000 (docs at /docs), web on :5173
 ```
+
+`npm run setup` is the same as: `npm install`, copy `apps/api/.env.example` to `apps/api/.env`, `npm run db:push`,
+`npm run db:seed`. The seed creates two demo properties (Hurghada resort, Makkah hotel) and the dev API key.
 
 Dev API key: `pms_dev_key_ashrafy` (header `x-api-key`). The web app stores it in local storage.
 
