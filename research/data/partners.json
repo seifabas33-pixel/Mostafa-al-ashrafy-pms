@@ -1,0 +1,15 @@
+{
+  "source": "Report section 9 (~45 named; Hotel Tech Report counts 18 verified partners vs Hotelogix 25)",
+  "categories": [
+    { "category": "OTAs & distribution", "partners": ["Booking.com", "Expedia", "Hotels.com", "SiteMinder (400+ channels)", "SmartHOTEL", "eZee Centrix", "STAAH", "Book Online Now", "RateGain", "YieldPlanet", "MyAllocator", "eRevMax", "Yanolja Cloud Solution"] },
+    { "category": "Payments", "partners": ["Adyen", "Ingenico", "Paymob", "Sympl (BNPL)", "Kashier", "DPO Group", "CCV"] },
+    { "category": "Guest experience, upsell & reputation", "partners": ["Oaky (by Plusgrade)", "ReviewPro (Shiji)", "DigitalGuest", "WeBee", "MyStay", "James & Rita", "Reflectfy (acquired)"] },
+    { "category": "Kiosks & self check-in", "partners": ["Ariane (Allegro v7 cloud)", "TABHOTEL"] },
+    { "category": "Door locks & access", "partners": ["SALTO Systems", "Hotek", "VingCard (Assa Abloy)", "dormakaba"] },
+    { "category": "ID / passport scanning", "partners": ["Samsotech", "OpenTEC", "Acuant", "AdriaScan"] },
+    { "category": "Telecom, spa, facilities", "partners": ["Mitel", "LOGICSWARE (Egypt)", "TNG spa/fitness"] },
+    { "category": "Accounting / ERP", "partners": ["Xero", "QuickBooks", "Infor SunSystems"] },
+    { "category": "Revenue management", "partners": ["Hotel Lab"] },
+    { "category": "Security / government", "partners": ["SITA iBorders (Qatar)", "ZATCA Fatoora", "Shomoos", "NTMP", "Egyptian Tax Authority"] }
+  ]
+}

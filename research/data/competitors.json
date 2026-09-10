@@ -1,0 +1,23 @@
+{
+  "source": "Report section 13 (Hotel Tech Report alternatives list)",
+  "global": [
+    { "vendor": "Cloudbeds", "htScore": 100, "reviews": 1265, "startingPriceUsd": 600, "positioning": "Growth engine for ambitious hoteliers; #1 small hotels, North America & APAC" },
+    { "vendor": "Mews", "htScore": 99, "reviews": 890, "startingPriceUsd": 900, "positioning": "Operating system for modern hotels; leads Europe and mid/large" },
+    { "vendor": "Stayntouch", "htScore": 91, "reviews": 391, "startingPriceUsd": 800, "positioning": "Personalised setup support" },
+    { "vendor": "HOTELTIME", "htScore": 89, "reviews": 549, "startingPriceUsd": 600, "positioning": "Mobile cloud access; Middle East leader" },
+    { "vendor": "Clock PMS+", "htScore": 88, "reviews": 329, "startingPriceUsd": 600, "positioning": "Multi-operation handling" },
+    { "vendor": "RMS Cloud", "htScore": 88, "reviews": 322, "startingPriceUsd": null, "positioning": "Built-in channel integration" },
+    { "vendor": "ThinkReservations", "htScore": 87, "reviews": 400, "startingPriceUsd": 500, "positioning": "Live support, training videos" },
+    { "vendor": "WebRezPro", "htScore": 82, "reviews": null, "startingPriceUsd": null, "positioning": "Tape chart, fast staff onboarding" },
+    { "vendor": "Hotelogix", "htScore": 82, "reviews": 246, "startingPriceUsd": null, "positioning": "4.9/5; 25 partners; strong in small/mid; India-based, active in MENA" },
+    { "vendor": "RoomRaccoon", "htScore": 79, "reviews": null, "startingPriceUsd": null, "positioning": "Yield rules" },
+    { "vendor": "Shiji Group", "htScore": 74, "reviews": 36, "startingPriceUsd": 1200, "positioning": "Enterprise, multi-window" },
+    { "vendor": "Kwentra", "htScore": 0, "reviews": 7, "startingPriceUsd": null, "positioning": "4.8/5; 18 partners; MENA compliance depth" }
+  ],
+  "regional": [
+    { "vendor": "ComSyS Software", "note": "Egypt, founded 1984, ~68 staff; legacy hospitality/restaurant/retail vendor with cloud and on-premise, channel manager, booking engine, housekeeping app; integrations M3, RateGain, Blastness, eRevMax; zero public reviews" },
+    { "vendor": "Oracle OPERA / OPERA Cloud", "note": "Incumbent in large branded Red Sea resorts; expensive; the system most independents want to leave" },
+    { "vendor": "eZee Absolute / Yanolja Cloud, Hotelogix, Cloudbeds, HotelRunner, Protel, Mews", "note": "Global cloud PMSs with MENA presence; several are both Kwentra channel-manager partner and competitor" },
+    { "vendor": "Odoo, Smart Order, Profitroom, HotelRunner", "note": "Buying Google Ads on Kwentra's brand search terms" }
+  ]
+}

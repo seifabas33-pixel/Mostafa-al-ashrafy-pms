@@ -1,0 +1,93 @@
+{
+  "source": "Report sections 3 and 4 (feature parity checklist)",
+  "note": "Front Office is contractually mandatory at Kwentra; all other modules attach to it. Channel Manager is not sold standalone.",
+  "modules": [
+    {
+      "key": "front-office",
+      "name": "Front Office (core PMS)",
+      "mandatory": true,
+      "marketedFeatureCount": "300+",
+      "areas": [
+        { "area": "Room Rack", "capabilities": ["Drag-style rack for check-in/out", "Cleaning and maintenance status", "Add-on packages, deposits, upgrades", "Out-of-order rooms block sales on all channels", "Back-in-order"] },
+        { "area": "Dashboard", "capabilities": ["Arrivals/departures", "Occupancy by room type", "Revenue and daily rate at a glance"], "complaints": ["Reviewers ask for a better live-occupancy view"] },
+        { "area": "Reservations", "capabilities": ["Individual and group bookings", "Guest preferences/history", "Rates and upgrades", "Multiple folios with split-rate", "Hourly/day-use", "Overbooking control", "Connected rooms", "Market-segment tracking"] },
+        { "area": "Group blocks", "capabilities": ["Block tracking", "Rooming-list import", "Group booking portal", "Batch charge posting", "Rolling release"] },
+        { "area": "Housekeeping", "capabilities": ["Room status", "Housekeeping progress", "Task assignment"] },
+        { "area": "Night audit", "capabilities": ["Automated night audit (marketed as rare among PMSs)", "Manual reconciliation optional"] },
+        { "area": "Rates", "capabilities": ["Dynamic pricing by availability/volume", "Derived rates", "Lead-day and length-of-stay restrictions", "Weekly/monthly rates", "Promo codes", "Geotargeted pricing module"] },
+        { "area": "Hostel mode", "capabilities": ["Sell individual beds as separate reservations while keeping private-room option"] },
+        { "area": "Guest journey", "capabilities": ["Self check-in via tablet/kiosk (Ariane, TABHOTEL)", "Digital registration and e-logbook", "Passport scanning (Samsotech, OpenTEC, Acuant, AdriaScan)", "Pre-arrival and post-stay email automation"] },
+        { "area": "Offline resilience", "capabilities": ["Front Office caches activity locally during outages and syncs on reconnect"] },
+        { "area": "Access control", "capabilities": ["Per-user screen and report permissions", "Role-based dashboards", "MFA (listed by ExploreTECH, unverified)"] },
+        { "area": "Add-on packages", "capabilities": ["Link activities and supplementary services for cross-sell/up-sell via Front Office, Booking Engine or Channel Manager"] }
+      ]
+    },
+    {
+      "key": "pos",
+      "name": "Point of Sale & Recipe Management",
+      "capabilities": [
+        "Real-time posting of F&B and outlet charges to the guest folio",
+        "Multiple payment methods",
+        "Kitchen instructions and allergy notes passed to kitchen",
+        "Touch-screen compatible; any receipt printer (no proprietary hardware)",
+        "Recipe management deducts ingredients from stock automatically",
+        "Revenue tracked by menu item; tax and accounting reports",
+        "Automatic offline mode during connectivity loss",
+        "Cashier-level tracking"
+      ]
+    },
+    {
+      "key": "channel-manager",
+      "name": "Channel Manager (launched 2018)",
+      "standalone": false,
+      "capabilities": [
+        "Two-way sync of rates and availability",
+        "One setup for all channels; single-click rate updates across room types",
+        "Stop-sell, length-of-stay and overbooking controls",
+        "Channel-performance reporting"
+      ],
+      "connections": ["Booking.com (43 languages)", "Expedia (70+ countries)", "SiteMinder (400+ channels)", "SmartHOTEL", "eZee Centrix (100+ OTAs)", "STAAH", "Book Online Now (550+ integrations)", "RateGain", "YieldPlanet", "MyAllocator", "eRevMax", "Yanolja Cloud"]
+    },
+    {
+      "key": "booking-engine",
+      "name": "Booking Engine",
+      "capabilities": ["Embeddable website widget", "Availability auto-updated from Front Office", "Mobile-optimised; SSL", "Promotional codes", "Sell rooms or beds", "Pre-arrival add-on services", "Online payment via Adyen, Paymob and others"]
+    },
+    {
+      "key": "inventory-procurement",
+      "name": "Inventory Management & Procurement (Back Office)",
+      "capabilities": ["Multi-warehouse stock allocation and cross-warehouse availability", "Documented vs actual consumption comparison", "Purchase-order creation with authorisation permissions", "Warehouse receiving workflow", "Procurement automation for high-volume groups (Maysan, Dar Al Eiman)"]
+    }
+  ],
+  "addOns": [
+    { "name": "Kwentra Sites", "what": "Website builder with copywriting, photography and embedded booking widget", "usedBy": ["Parkside Avenue", "Onatti Beach Resort"] },
+    { "name": "Kwentra Pay", "what": "Payment layer on Paymob and Sympl; flexible methods incl. Buy-Now-Pay-Later", "note": "Egypt-centric", "usedBy": ["Amphoras", "Parkside Avenue"] },
+    { "name": "General Accounts", "what": "AP, reconciliation, invoice management linking revenue, payments and expenses", "integrates": ["Xero", "QuickBooks", "Infor SunSystems"] },
+    { "name": "Multi-Property", "what": "One login for all hotels, central reservations (view/move bookings across properties), central back office, cross-property KPIs in Hijri and Gregorian calendars", "architecture": "Separate database schema per property; consolidated reporting via service layer; positioned around Umrah-season peaks" },
+    { "name": "kwentra Insights app", "what": "Owner/GM mobile dashboard: occupancy, revenue, ADR, RevPAR, GOP; single or multi-property", "store": { "platforms": "iOS 10.1+/Android", "version": "1.8.1", "sizeMb": 52, "downloads": "500+", "rating": 5.0, "ratings": 5, "updated": "2026-08-23", "publisher": "CLOUDINN FOR SOFTWARE" } },
+    { "name": "Mobile App (front office)", "what": "Listed for several Sinai clients", "usedBy": ["Tamra Beach", "Sharm Reef", "Club Reef", "Labranda"], "note": "Scope not documented publicly" }
+  ],
+  "kai": {
+    "name": "K-AI operations assistant",
+    "announced": "2026-04",
+    "scope": "Front Office only; other modules on roadmap",
+    "capabilities": [
+      "Instant retrieval and analysis of operational data via plain-language commands",
+      "Real-time monitoring of inventory, bookings and revenue",
+      "Detection of pricing exceptions (rooms sold below a threshold rate)",
+      "Detection of VIP and returning-guest bookings and reservations with special conditions",
+      "Execute authorised actions: apply stop-sell, adjust pricing/yield controls, escalate to management",
+      "Proactive alerts on revenue or operational risk",
+      "Automated report generation and live sentiment tracking (workshop coverage)"
+    ],
+    "examplePrompts": ["Any date this month with fewer than five rooms available", "Flag any room booked below EUR 70 today"],
+    "quantifiedClaims": "None published"
+  },
+  "reflectfy": {
+    "acquired": "2026-09-07",
+    "what": "AI reputation-management platform: review aggregation, sentiment analysis and AI insights",
+    "builtBy": "Youssef Siam",
+    "strategy": "Moves Kwentra into territory covered by partner ReviewPro (Shiji); build-vs-partner shift toward owning the guest-feedback layer",
+    "terms": "Undisclosed"
+  }
+}

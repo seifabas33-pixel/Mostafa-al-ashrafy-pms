@@ -1,0 +1,27 @@
+{
+  "source": "Report section 11",
+  "directories": [
+    { "directory": "Hotel Tech Report", "rating": 4.8, "ratingNote": "4.7 on some views; 95% would recommend", "reviews": 7, "subScores": { "easeOfUse": 4.4, "support": 4.3, "valueRoi": 4.3, "implementation": 4.4 }, "htScore": 0, "rank": "#57 of 357 PMSs; #54 trending", "notes": "Support processes not verified; no Certificate of Excellence" },
+    { "directory": "Capterra / Capterra India", "rating": null, "reviews": 0, "notes": "Lists 14 features, web + iOS + Android, free trial available, 24/7 live rep" },
+    { "directory": "GetApp", "rating": null, "reviews": 0, "notes": "Same listing family as Capterra" },
+    { "directory": "Software Advice", "rating": null, "reviews": 0, "notes": "Connect with an advisor for pricing; no free version" },
+    { "directory": "SourceForge / Slashdot", "rating": null, "reviews": null, "notes": "Directory entries only" },
+    { "directory": "Google Play (Insights app)", "rating": 5.0, "reviews": 5, "notes": "500+ downloads" },
+    { "directory": "Facebook", "rating": null, "reviews": null, "notes": "5.6K+ followers; active Arabic and English posts" }
+  ],
+  "reviewerProfile": { "countries": { "Egypt": 6, "Sierra Leone": 1 }, "propertySizes": ["50-74 rooms", "200-499 rooms"], "roles": ["owners", "general managers", "IT managers", "chief accountants", "rooms-division managers"], "segmentRecommendation": { "resorts": 81, "boutique": 67, "luxury/branded/hostel/budget": 100 } },
+  "praise": [
+    "24/7 support and responsive, professional team during pre-opening and live operations",
+    "Fast implementation and easy onboarding; cloud access from anywhere",
+    "All-in-one scope: front office, back office, POS, channel manager and website in one bill",
+    "Comprehensive reporting; smart integrations with channel managers and payment systems",
+    "Willingness to co-develop and customise features"
+  ],
+  "criticism": [
+    "Dashboard does not show live occupancy the way managers want; limited filtering options",
+    "Room-category presentation issues left unresolved; package management broke after updates",
+    "Hotel Tech Report: suitable for legacy-system integration but too little validation data"
+  ],
+  "rankingsBySize": { "small": 68, "mid": 50, "large": 29 },
+  "differentiatorsVsHotelogix": ["On-premise deployment option", "Lobby-kiosk functionality", "Employee messaging", "Automated reminders"]
+}

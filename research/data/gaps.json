@@ -1,0 +1,18 @@
+{
+  "source": "Report section 14: observed Kwentra weakness paired with the opening it creates",
+  "gaps": [
+    { "id": "pricing", "observed": "Opaque pricing: no public list, quote-only, non-refundable, 60-day notice, no SLA", "opportunity": "Publish transparent per-room and occupancy-based tiers in EGP/SAR/USD with a real uptime SLA and monthly cancellation" },
+    { "id": "frontend", "observed": "Dated front-end stack (Bootstrap 3.0.2, jQuery 2.0.3, Metronic 4.7.5) and hash-routed legacy app", "opportunity": "Modern responsive web app (React/Vue) with true mobile front-desk and housekeeping apps" },
+    { "id": "dashboard", "observed": "Dashboard and filtering complaints; regressions after weekly updates", "opportunity": "Live occupancy/rate dashboard, saved filters, staged releases with release notes; stability as a selling point" },
+    { "id": "reviews", "observed": "Only 7 public reviews in 12+ years; zero on Capterra/GetApp", "opportunity": "Bake review collection into onboarding and support closure; 30 verified reviews would out-rank Kwentra" },
+    { "id": "api", "observed": "'Open API' claimed but no public developer docs", "opportunity": "Public, documented REST/webhook API from day one" },
+    { "id": "support", "observed": "Training deliberately online-only; 24-hour response commitment", "opportunity": "Optional on-site go-live for resorts and a local-language WhatsApp support line" },
+    { "id": "compliance", "observed": "Compliance moat: ETA, Ministry of Interior, ZATCA, Shomoos, NTMP", "opportunity": "Non-negotiable to match. Egypt ETA + guest reporting first, then Saudi ZATCA/Shomoos/NTMP; Hijri/Gregorian dual reporting expected" },
+    { "id": "guest-layer", "observed": "Guest-facing layer thin: reputation and upsell partner-supplied until Reflectfy", "opportunity": "Native guest messaging (WhatsApp), digital check-in, upsell and review requests; entertainment/activities booking plugs in as differentiator" },
+    { "id": "activities", "observed": "Activities and add-on packages basic (link services to reservations)", "opportunity": "Real activities/entertainment module: schedules, capacity, animation-team programmes, guest sign-ups, resort programme publishing" },
+    { "id": "gtm", "observed": "Growth lever is field workshops and referral commissions (USD 300 / 10%)", "opportunity": "Hotel-group workshops on the Red Sea, GM/F&B referral network, reseller deals with local IT integrators" },
+    { "id": "multi-property", "observed": "Multi-property is a headline feature sold to 20-hotel groups", "opportunity": "Multi-property from the start (schema-per-property or row-level tenancy)" },
+    { "id": "pos", "observed": "POS with recipe costing and procurement is a genuine strength", "opportunity": "Match F&B stock deduction and PO workflow; all-inclusive resorts treat this as core" }
+  ],
+  "readingOrder": ["Section 3 feature parity checklist", "Section 8 compliance scope", "Section 9 integrations to prioritise", "Section 6 contract terms to beat", "Section 13 pricing corridor"]
+}

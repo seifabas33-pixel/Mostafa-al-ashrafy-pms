@@ -1,0 +1,19 @@
+{
+  "source": "Report section 5 (fingerprinted from public login portal, vendor listings and FAQ)",
+  "hosting": "Google Cloud Platform, containerised deployment; Google security standards plus periodic third-party audits",
+  "backend": "Python/Django (csrfmiddlewaretoken, /account/login/?next= redirect pattern, /static/ layout)",
+  "frontend": {
+    "stack": ["Server-rendered Django templates", "Metronic v4.7.5 admin theme", "Bootstrap 3.0.2", "jQuery 2.0.3", "Font Awesome 4.7 (cdnjs)"],
+    "frontOfficeApp": "/frontoffice/#/home hash-routed single-page app, framework not exposed",
+    "modernFrameworkDetected": false
+  },
+  "multiTenancy": "Separate database schema per property; consolidated reporting through external service layer; SSO across properties",
+  "offline": { "frontOffice": "Local caching", "pos": "Automatic offline mode" },
+  "mobile": { "app": "kwentra Insights", "packageId": "net.cloudinn.managementapp" },
+  "api": { "claim": "Open API for custom integrations (ExploreTECH)", "publicDocs": false },
+  "securityClaims": { "gdprAligned": true, "soc1soc2": "ExploreTECH only, unverified", "mfa": "ExploreTECH only, unverified", "encryption": "ExploreTECH only, unverified" },
+  "scaleClaim": { "properties": "500+", "unverified": true },
+  "releaseCadence": "Weekly updates; one reviewer reports package-management regressions after updates",
+  "environments": ["manage.kwentra.com (production)", "test.kwentra.com (test/demo)", "testwww.kwentra.com (staging marketing)"],
+  "helpCenter": "SupportHero, login-gated; interactive guides and videos embedded on every screen; 30-minute walkthrough per module"
+}

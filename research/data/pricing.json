@@ -1,0 +1,40 @@
+{
+  "source": "Report sections 6 and 13",
+  "kwentra": {
+    "publishesPrices": false,
+    "directoriesShow": "contact vendor",
+    "models": [
+      { "key": "per-room", "description": "Per-room-per-month fixed subscription" },
+      { "key": "occupancy-based", "description": "Fee varies with guests actually in-house; marketed for seasonal properties; can result in zero charge for a closed period" }
+    ],
+    "minimumScope": "Front Office module in every subscription",
+    "implementationFee": "Listed by ExploreTECH, amount undisclosed",
+    "switchingModels": "Only when the current term expires",
+    "billing": "Card on file, or invoice: per-room fees net 30 days; occupancy-based invoiced no later than 45 days after period start; fees exclude VAT",
+    "upgradesDowngrades": "Upgrades pro-rated to next billing date; downgrades limited, no refunds, effective at term end",
+    "refunds": "All payment obligations non-cancellable; all amounts non-refundable",
+    "cancellation": "Written notice 60+ days before subscription expiry; data deleted from backups within 30 days of termination",
+    "nonPayment": "Notice, suspension possible 10 days later; re-activation fees may apply",
+    "vendorTermination": "May suspend or terminate accounts for any reason at any time",
+    "sla": "None; no guarantee of uninterrupted or error-free operation",
+    "liability": "No liability for lost profits or indirect damages; not responsible for third-party-caused data loss",
+    "dataProtection": "GDPR-style processing; five-year confidentiality",
+    "governingLaw": "ADGM, UAE; CISG excluded",
+    "freeTrial": "Conflicting: Capterra yes, Software Advice no; demo is free"
+  },
+  "industryBenchmarks2026": {
+    "perRoomPerMonthUsd": { "min": 4, "max": 15, "example": "20 rooms at USD 8 = USD 160/month" },
+    "flatFeeTiersUsd": { "entry": [50, 95], "mid": [150, 300], "advanced": [400, 600] },
+    "setupOnboardingUsd": [500, 2000],
+    "onSiteTrainingPerDayUsd": [850, 1500],
+    "customConfigPerHourUsd": [150, 300],
+    "integrationFeesPerMonthUsd": [200, 500],
+    "paymentProcessing": { "percent": [1, 3], "perTransactionUsd": [0.15, 0.30] },
+    "onPremiseLicenceUsd": { "upfront": [20000, 100000], "annualMaintenance": [10000, 30000] },
+    "allInSmallHotelUnder30RoomsUsd": [50, 200],
+    "allInMidSize30to100RoomsUsd": [200, 800]
+  },
+  "competitorStartingPricesUsdPerMonth": {
+    "Cloudbeds": 600, "Mews": 900, "Stayntouch": 800, "HOTELTIME": 600, "Clock PMS+": 600, "ThinkReservations": 500, "Shiji Group": 1200, "Hotelogix": null, "Kwentra": null
+  }
+}

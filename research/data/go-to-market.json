@@ -1,0 +1,25 @@
+{
+  "source": "Report sections 7 and 12",
+  "onboarding": {
+    "goLive": "Ecosystem provisioned within 48 hours of registration; data migration offered",
+    "setup": "Dedicated Experience Manager runs kick-off and customised plan; template tax and pricing configurations pre-loaded",
+    "training": "Self-serve Help Center with interactive guides and videos; 30-minute walkthrough per module; one-to-one follow-ups; classroom training discouraged",
+    "support": "24/7 support; dedicated Experience Manager; 24-hour response commitment; chat, email, phone, knowledge base",
+    "languages": { "faqClaim": 7, "named": ["English", "Arabic", "Dutch", "French", "Spanish", "Portuguese"], "exploreTech": ["English", "Arabic"], "appStore": ["English"] },
+    "hardware": "Browser only (Chrome/Firefox); works on mobile data; POS uses any receipt printer",
+    "currencyTax": "Multi-currency; configurable tax definitions per country",
+    "reportingCalendars": ["Hijri", "Gregorian"]
+  },
+  "channels": [
+    { "channel": "Direct sales", "mechanics": "Free demo via calendar form; VP Sales plus GCC partnerships head; Experience Managers handle onboarding and retention" },
+    { "channel": "Referral programme", "mechanics": "USD 300 per closed deal for sharing a referral code; paid quarterly, max four quarterly payments per contract; tiered by contracts per year" },
+    { "channel": "Kwentra Champion", "mechanics": "10% commission on first-year revenue for actively pitching properties" },
+    { "channel": "Reseller network", "mechanics": "Global reseller programme with negotiated commission" },
+    { "channel": "Field marketing", "mechanics": "On-site K-AI workshops at hotel groups; Saudi roadshow; 'Tech Hospitality for IT Leaders' workshop" },
+    { "channel": "Events", "mechanics": "ITB Berlin 2026; HTLF Dubai 2023" },
+    { "channel": "Content", "mechanics": "Blog ~2 posts/month in 2026; news feed of client wins" },
+    { "channel": "Education", "mechanics": "'Empowering Hoteliers of Tomorrow' programme for tourism students" },
+    { "channel": "Partner listings", "mechanics": "Hotel Tech Report, ExploreTECH, Ariane, SiteMinder marketplaces as lead sources" }
+  ],
+  "messagingPillars": ["Increased revenue", "Operational efficiency", "Cost-effectiveness", "Guest loyalty"]
+}

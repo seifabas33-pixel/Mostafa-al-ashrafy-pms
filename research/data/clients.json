@@ -1,0 +1,51 @@
+{
+  "source": "Report section 10 (37 named clients or groups). Front Office universal; Channel Manager most common attach; POS/Back Office mainly at resorts and groups.",
+  "clients": [
+    { "name": "Three Corners Hotels", "country": "Egypt", "location": "Marsa Alam", "size": "4+ resorts, 1,700+ rooms", "modules": ["Front Office", "Payment gateway", "RateGain channel manager", "Advanced reporting", "Electronic locks", "ETA", "Ministry of Interior reporting"] },
+    { "name": "Tropitel Hotels & Resorts", "country": "Egypt", "location": "Sahl Hasheesh, Dahab, Hurghada", "modules": ["PMS", "Front-of-house optimisation"], "note": "2026 expansion" },
+    { "name": "Amphoras Hotels (Beach, Blu, Aqua)", "country": "Egypt", "location": "Sharm El-Sheikh", "modules": ["Front Office (ETA)", "Back Office", "Channel Manager", "Kwentra Pay", "Booking.com", "Expedia"], "note": "K-AI workshop Jul 2026" },
+    { "name": "Strand Beach & Golf Resort", "country": "Egypt", "location": "Taba", "modules": ["Front Office", "POS", "Channel Manager", "Oaky", "ReviewPro"] },
+    { "name": "Mosaique Beach Resort", "country": "Egypt", "location": "Taba", "modules": ["Front Office (ETA)", "POS", "Channel Manager", "Oaky", "ReviewPro"] },
+    { "name": "Tamra Beach Resort", "country": "Egypt", "location": "Sharm El-Sheikh", "modules": ["Front Office (ETA)", "Mobile App"] },
+    { "name": "Sharm Reef Hotel", "country": "Egypt", "location": "Sharm El-Sheikh", "modules": ["Front Office (ETA)", "Mobile App"] },
+    { "name": "Club Reef Resort", "country": "Egypt", "location": "Sharm El-Sheikh", "modules": ["Front Office (ETA)", "Mobile App"] },
+    { "name": "Labranda Sharm Club Resort", "country": "Egypt", "location": "Sharm El-Sheikh", "modules": ["Front Office (ETA)", "Mobile App"] },
+    { "name": "Time Coral Nuweiba Resort", "country": "Egypt", "location": "Nuweiba", "modules": ["Front Office", "Back Office", "Channel Manager (SiteMinder)", "POS"] },
+    { "name": "Gemma Resort", "country": "Egypt", "location": "Marsa Alam", "modules": ["Front Office (ETA)", "Back Office", "Channel Manager"] },
+    { "name": "Onatti Beach Resort", "country": "Egypt", "location": "El Quseir", "modules": ["Front Office", "Back Office", "POS", "Direct booking", "Channel Manager", "Kwentra Sites"] },
+    { "name": "Lagoonie Lodge / Eish Baladi", "country": "Egypt", "location": "Hurghada", "modules": ["Front Office", "POS", "Back Office", "Channel Manager"] },
+    { "name": "Caesar Bay Resort", "country": "Egypt", "location": "Marsa Matrouh", "modules": ["Front Office (ETA)", "Back Office", "Channel Manager"] },
+    { "name": "Stay Inn Hotels", "country": "Egypt", "location": "Giza", "modules": ["Front Office", "Back Office", "Channel Manager"] },
+    { "name": "Pyramid Edge Al Haram", "country": "Egypt", "location": "Giza", "modules": ["Front Office", "Channel Manager"] },
+    { "name": "Parkside Avenue (serviced apartments)", "country": "Egypt", "location": "Heliopolis, Cairo", "modules": ["Front Office", "Back Office", "Direct booking", "Channel Manager (SiteMinder)", "POS", "Kwentra Pay", "Kwentra Sites"] },
+    { "name": "Ghrghar Towers (furnished towers)", "country": "Egypt", "location": "Nasr City, Cairo", "modules": ["Front Office"] },
+    { "name": "Maysan Group", "country": "Saudi Arabia", "location": "Makkah, Madinah", "size": "20 hotels, 5,000+ rooms", "modules": ["PMS", "POS", "Back Office"], "note": "High-volume services, inventory automation, financial reporting" },
+    { "name": "Dar Al Eiman Al Haram (SERB Group)", "country": "Saudi Arabia", "location": "Makkah / Madinah", "size": "3,000-room portfolio", "modules": ["PMS", "POS", "Back Office"], "note": "Billing, inventory, unified accounting" },
+    { "name": "Sadaa Hospitality Group", "country": "Saudi Arabia", "location": "Makkah, Madinah, Riyadh", "size": "7 properties", "modules": ["PMS", "Channel Manager"] },
+    { "name": "Al Qasr Hotels", "country": "Saudi Arabia", "location": "Abha, Kingdom-wide", "modules": ["Front Office", "Back Office", "POS"] },
+    { "name": "Rhenium Hotels & Resorts (by Al Qasr)", "country": "Saudi Arabia", "location": "Riyadh, Jazan, Abha", "modules": ["Front Office", "Back Office", "POS"] },
+    { "name": "Velar Inn", "country": "Saudi Arabia", "location": "Taif", "modules": ["Front Office", "Back Office", "POS", "Online booking", "Channel Manager"], "note": "ZTCA compliance" },
+    { "name": "The Grand Lux Hotel", "country": "Qatar", "location": "Doha", "modules": ["Front Office", "Back Office", "Channel Manager", "Opentec passport scanning", "SALTO", "SITA iBorders"] },
+    { "name": "Saraya Corniche Hotel", "country": "Qatar", "location": "Doha", "modules": ["Front Office", "Channel Manager"] },
+    { "name": "Victoria Hotel", "country": "Qatar", "location": "Doha", "modules": ["Front Office", "Channel Manager"] },
+    { "name": "Terminal Inn by Edar City Centre", "country": "Qatar", "location": "Doha", "modules": ["Front Office"] },
+    { "name": "Ngoma Zanga Lodge", "country": "Zambia", "location": "Livingstone", "modules": ["Front Office", "POS", "Online booking", "Channel Manager"] },
+    { "name": "Greens Nungwi", "country": "Tanzania", "location": "Zanzibar", "modules": ["Front Office", "Channel Manager"] }
+  ],
+  "prospects2026": [
+    { "name": "SRNTY Hotels", "country": "Egypt", "location": "Sahl Hasheesh", "type": "K-AI workshop / partnership" },
+    { "name": "Ivy Hotels & Resorts", "country": "Egypt", "type": "K-AI workshop / partnership" },
+    { "name": "Dreams Hotels Group", "country": "Egypt", "type": "K-AI workshop / partnership" },
+    { "name": "EVC Resorts", "country": "Egypt", "location": "Sharm El-Sheikh", "type": "K-AI workshop / partnership" },
+    { "name": "Fanaya Hotel", "country": "Saudi Arabia", "location": "Jeddah", "type": "Roadshow stop" },
+    { "name": "Sedra Hotels", "country": "Saudi Arabia", "location": "Madinah", "type": "Roadshow stop" },
+    { "name": "Golden Tulip Al Shakreen", "country": "Saudi Arabia", "location": "Madinah", "type": "Roadshow stop" }
+  ],
+  "testimonials": [
+    { "name": "Jean Basta", "role": "Sales Supervisor, Eish Baladi & Lagoonie Lodge", "topic": "POS usability and cashier tracking" },
+    { "name": "Chantal Jordan", "role": "Owner, Ngoma Zanga Lodge", "topic": "Control" },
+    { "name": "Omar Gabry", "role": "GM, Pyramid Edge", "topic": "Fit to hotelier needs" },
+    { "name": "Ramy Waheed", "role": "MD, Greens Nungwi", "topic": "General" }
+  ],
+  "countryCounts": { "Egypt": 18, "Saudi Arabia": 6, "Qatar": 4, "East Africa": 2, "Sierra Leone (reviewer only)": 1 }
+}

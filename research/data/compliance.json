@@ -1,0 +1,14 @@
+{
+  "source": "Report section 8. Described as Kwentra's most defensible differentiator and the area a new entrant must budget for first.",
+  "requirements": [
+    { "market": "Egypt", "code": "ETA", "requirement": "Egyptian Tax Authority e-invoicing / e-receipt", "kwentra": "Listed for most Egyptian clients (Mosaique, Tamra, Amphoras, Sharm Reef, Club Reef, Labranda, Gemma, Caesar Bay, Three Corners)", "priority": 1 },
+    { "market": "Egypt", "code": "MOI", "requirement": "Ministry of Interior / Ministry of Internal Affairs guest reporting", "kwentra": "Automated reporting cited for Three Corners Hotels", "priority": 1 },
+    { "market": "Saudi Arabia", "code": "ZATCA", "requirement": "ZATCA e-invoicing (Fatoora platform)", "kwentra": "Direct integration: instant tax invoices and credit notes at checkout; instant VAT reports", "priority": 2 },
+    { "market": "Saudi Arabia", "code": "SHOMOOS", "requirement": "Shomoos security guest-data system", "kwentra": "Automated secure transmission of guest data and reports", "priority": 2 },
+    { "market": "Saudi Arabia", "code": "NTMP", "requirement": "National Tourism Monitoring Platform (Ministry of Tourism)", "kwentra": "Real-time automatic submission of guest data and required reports", "priority": 2 },
+    { "market": "Qatar", "code": "QATAR_BORDER", "requirement": "Border/security and ID", "kwentra": "SITA iBorders, Opentec passport scanning, SALTO at The Grand Lux Hotel", "priority": 3 },
+    { "market": "Region", "code": "HIJRI", "requirement": "Hijri calendar reporting; Arabic UI", "kwentra": "Native in Multi-Property reporting and UI", "priority": 1 },
+    { "market": "EU", "code": "GDPR", "requirement": "GDPR", "kwentra": "Referenced in terms; ReviewPro/DigitalGuest partners EU-based", "priority": 3 }
+  ],
+  "recommendedSequence": ["Egypt ETA e-receipt/e-invoice + Ministry of Interior guest reporting", "Saudi ZATCA / Shomoos / NTMP for the Umrah market", "Hijri/Gregorian dual reporting throughout"]
+}

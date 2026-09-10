@@ -1,0 +1,42 @@
+{
+  "source": "Kwentra PMS Competitive Research Report, 8 September 2026, sections 1-2 and 15",
+  "brand": "kwentra",
+  "tagline": "The hospitality ecosystem for tomorrow",
+  "operatingCompany": "CLOUDINN FOR SOFTWARE S.A.E. (Egyptian joint-stock company; app-store publisher of record)",
+  "contractingEntity": "Cloud Hospitality Tech Ltd, governed by ADGM (Abu Dhabi Global Market) law, UAE",
+  "founded": { "value": "2013-2014", "note": "Boilerplate says 2013; ExploreTECH lists product launch 2014 and Channel Manager 2018; Crunchbase hides date" },
+  "headquarters": { "primary": "Cairo, Egypt", "alternate": "Abu Dhabi, UAE (Hotel Tech Report; ADGM legal entity)", "note": "Most likely Egyptian operations with a UAE contracting company; Facebook page located in Giza" },
+  "headcount": { "value": 35, "range": "11-50", "unverified": true },
+  "revenueUsd": { "value": "under 5 million", "source": "ZoomInfo estimate", "unverified": true },
+  "funding": "None disclosed on Crunchbase",
+  "mission": "Make powerful property-management technology accessible to the independent hospitality operator",
+  "positioningClaims": [
+    "Fastest-growing cloud-based PMS in MENA",
+    "Used in more than 20 countries",
+    "Over 800 capabilities across the ecosystem",
+    "Front Office 300+ features",
+    "Save 4 hours per day",
+    "Up to 70% reduction in IT expenses"
+  ],
+  "webTraffic": { "monthlyVisits": 63000, "crunchbaseGrowthScore": 85, "crunchbaseHeatScore": 59 },
+  "social": { "facebookFollowers": "5.6K+", "linkedin": "linkedin.com/company/kwentraecosystem", "other": ["Instagram", "X/Twitter"] },
+  "domains": {
+    "marketing": "www.kwentra.com",
+    "blog": "resources.kwentra.com (WordPress)",
+    "production": "manage.kwentra.com",
+    "test": "test.kwentra.com",
+    "staging": "testwww.kwentra.com",
+    "media": "media.kwentra.com",
+    "helpCenter": "kwentra.supporthero.io (login-gated)"
+  },
+  "contacts": { "general": "info@kwentra.com", "partnerships": "rashi@kwentra.com" },
+  "leadership": [
+    { "name": "Mai Shalaby", "role": "Co-founder & CEO (also listed as COO)", "source": "The Org; Kwentra news" },
+    { "name": "Ahmed Toulan", "role": "Chief Technology Officer", "source": "The Org" },
+    { "name": "Loay Sherif", "role": "Vice President of Sales", "source": "The Org" },
+    { "name": "Rashi Srivastava", "role": "Head of Partnership & Distribution, GCC", "source": "Kwentra news; ExploreTECH" },
+    { "name": "Amr Negm", "role": "Listed on The Org (role not captured)", "source": "The Org" },
+    { "name": "Mahmoud Seleem", "role": "Social Media Marketer", "source": "ZoomInfo" },
+    { "name": "Youssef Siam", "role": "Engineer who built Reflectfy (acquired Sept 2026)", "source": "Kwentra news" }
+  ]
+}
