@@ -51,6 +51,21 @@ npm run typecheck           # both apps
 npm run build               # both apps
 ```
 
+### Troubleshooting a local run
+
+Run both commands in a terminal **on your own machine**, in the folder you cloned the repository into.
+Everything is local: the API, the web app and the SQLite database all run on your computer, and
+`http://localhost:5173` only works in a browser on that same computer.
+
+| Symptom | Cause and fix |
+| --- | --- |
+| `npm run setup` fails with syntax errors, or `Unsupported engine` | Node is too old. Run `node -v`; it must be 22 or newer. Install the current LTS from nodejs.org, close the terminal, reopen it and try again. |
+| `prisma: not found` or `vite: not found` | Dependencies are not installed. Run `npm install` in the repository root first, then `npm run setup`. |
+| `EADDRINUSE` on 4000 or 5173 | Something else is using the port. Stop it, or start the API on another port with `PORT=4001 npm run dev -w apps/api`. |
+| `prisma db push` warns that data will be lost | The demo database predates a schema change. Delete `apps/api/prisma/dev.db` and run `npm run setup` again; it only holds demo data. |
+| The browser shows nothing at `localhost:5173` | Check the terminal running `npm run dev` is still open and shows no errors. Both servers stop when you close that terminal. |
+| The app loads but every panel says unauthorised | The API key in Settings does not match the seeded one. Set it back to `pms_dev_key_ashrafy`, or re-run `npm run db:seed`. |
+
 ## Repository layout
 
 ```
