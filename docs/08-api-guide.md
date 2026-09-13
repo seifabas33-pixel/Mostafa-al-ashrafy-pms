@@ -8,7 +8,10 @@ Interactive docs: `http://localhost:4000/docs` (Swagger UI) · machine-readable:
 x-api-key: pms_dev_key_ashrafy
 ```
 
-Keys belong to an organisation and carry scopes: `read` (GET), `write` (mutations), `admin`. Routes under
+Keys belong to an organisation and carry scopes: `read` (GET), `write` (mutations), `admin` (minting, listing
+and revoking keys). `admin` implies `write`, `write` implies `read`. A key is shown in full only once, when
+`POST /api/api-keys` creates it; only its SHA-256 digest is stored, so it cannot be recovered later. Revoke one
+with `DELETE /api/api-keys/:id`. Routes under
 `/api/public/*`, `/health`, `/docs` need no key. Errors are always `{ "error": { "code", "message", "details" } }`.
 
 ## A day at the front desk, in requests

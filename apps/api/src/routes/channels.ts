@@ -5,6 +5,7 @@ import { prisma } from '../db.js';
 import { requireProperty } from '../plugins/auth.js';
 import { dayString, propertyAndId, propertyParam } from '../lib/schemas.js';
 import { parseDay } from '../lib/dates.js';
+import { ownedChannelConnection } from '../lib/ownership.js';
 import { buildAri, pushAri } from '../services/channels.js';
 import { createReservation } from '../services/reservations.js';
 
@@ -30,7 +31,7 @@ export async function channelRoutes(fastify: FastifyInstance) {
     { schema: { tags: ['channels'], params: propertyAndId, body: z.object({ externalRef: z.string(), guest: z.object({ firstName: z.string(), lastName: z.string(), email: z.string().optional(), phone: z.string().optional(), nationality: z.string().length(2).optional() }), roomTypeCode: z.string(), ratePlanCode: z.string().default('BAR'), arrival: dayString, departure: dayString, adults: z.number().int().min(1).default(2), children: z.number().int().min(0).default(0), specialRequests: z.string().default('') }), description: 'Inbound OTA reservation delivered by a channel manager' } },
     async (req, reply) => {
       const p = await requireProperty(req, req.params.propertyId);
-      const conn = await prisma.channelConnection.findUniqueOrThrow({ where: { id: req.params.id } });
+      const conn = await ownedChannelConnection(p, req.params.id);
       const rt = await prisma.roomType.findUniqueOrThrow({ where: { propertyId_code: { propertyId: p.id, code: req.body.roomTypeCode } } });
       const rp = await prisma.ratePlan.findUniqueOrThrow({ where: { propertyId_code: { propertyId: p.id, code: req.body.ratePlanCode } } });
       const r = await createReservation(p, { ...req.body, roomTypeId: rt.id, ratePlanId: rp.id, source: 'OTA', channel: conn.channel, allowOverbooking: true, actor: `channel:${conn.channel}` });

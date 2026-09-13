@@ -31,13 +31,16 @@ export async function availability(property: Property, from: Date, to: Date): Pr
       propertyId: property.id,
       status: { in: ACTIVE_STATUSES },
       arrival: { lt: to },
-      departure: { gt: from },
+      // A day-use stay is stored with departure === arrival, so `departure > from` drops it
+      // from any window that starts on its own date — exactly the window the booking path
+      // queries. Match it on arrival instead.
+      OR: [{ departure: { gt: from } }, { dayUse: true, arrival: { gte: from } }],
     },
     select: { roomTypeId: true, arrival: true, departure: true, dayUse: true, bedsRequested: true },
   });
   const blocks = await prisma.groupBlock.findMany({
     where: { propertyId: property.id, status: { in: ['TENTATIVE', 'DEFINITE'] }, arrival: { lt: to }, departure: { gt: from } },
-    include: { lines: true, reservations: { where: { status: { in: ACTIVE_STATUSES } }, select: { roomTypeId: true } } },
+    include: { lines: true, reservations: { where: { status: { in: ACTIVE_STATUSES } }, select: { roomTypeId: true, arrival: true, departure: true } } },
   });
 
   return roomTypes.map((rt) => {
@@ -58,7 +61,9 @@ export async function availability(property: Property, from: Date, to: Date): Pr
         if (!(b.arrival <= night && b.departure > night)) continue;
         const line = b.lines.find((l) => l.roomTypeId === rt.id);
         if (!line) continue;
-        const pickedUp = b.reservations.filter((x) => x.roomTypeId === rt.id).length;
+        // Count pick-up for THIS night only. Counting it across the whole block released a
+        // contracted room on every night a partial pick-up did not cover.
+        const pickedUp = b.reservations.filter((x) => x.roomTypeId === rt.id && x.arrival <= night && x.departure > night).length;
         booked += Math.max(0, line.quantity - pickedUp);
       }
       return { date: formatDay(night), available: Math.max(0, physical - booked), booked, outOfOrder: ooo };
@@ -75,8 +80,22 @@ export async function availability(property: Property, from: Date, to: Date): Pr
   });
 }
 
-/** Rooms of a type that have no overlapping assignment across the stay. */
-export async function freeRooms(property: Property, roomTypeId: string, arrival: Date, departure: Date, excludeReservationId?: string) {
+/**
+ * Rooms of a type that can still take this stay.
+ *
+ * In ROOM mode a room is free when nothing overlaps it. In BED mode (hostel dorms) a room
+ * holds `bedsPerRoom` separately-sold beds, so it stays selectable until the beds already
+ * committed across the stay plus the beds now requested would exceed that capacity.
+ */
+export async function freeRooms(
+  property: Property,
+  roomTypeId: string,
+  arrival: Date,
+  departure: Date,
+  excludeReservationId?: string,
+  bedsRequested = 1,
+) {
+  const roomType = await prisma.roomType.findUnique({ where: { id: roomTypeId } });
   const rooms = await prisma.room.findMany({
     where: { propertyId: property.id, roomTypeId, status: { not: 'OUT_OF_ORDER' } },
     orderBy: { number: 'asc' },
@@ -87,11 +106,22 @@ export async function freeRooms(property: Property, roomTypeId: string, arrival:
       roomId: { not: null },
       status: { in: ACTIVE_STATUSES },
       arrival: { lt: departure },
-      departure: { gt: arrival },
+      OR: [{ departure: { gt: arrival } }, { dayUse: true, arrival: { gte: arrival } }],
       ...(excludeReservationId ? { id: { not: excludeReservationId } } : {}),
     },
-    select: { roomId: true },
+    select: { roomId: true, bedsRequested: true },
   });
-  const taken = new Set(overlapping.map((r) => r.roomId));
-  return rooms.filter((r) => !taken.has(r.id));
+
+  if (roomType?.sellMode !== 'BED') {
+    const taken = new Set(overlapping.map((r) => r.roomId));
+    return rooms.filter((r) => !taken.has(r.id));
+  }
+
+  const capacity = roomType.bedsPerRoom;
+  const usedByRoom = new Map<string, number>();
+  for (const r of overlapping) {
+    if (!r.roomId) continue;
+    usedByRoom.set(r.roomId, (usedByRoom.get(r.roomId) ?? 0) + r.bedsRequested);
+  }
+  return rooms.filter((r) => (usedByRoom.get(r.id) ?? 0) + bedsRequested <= capacity);
 }

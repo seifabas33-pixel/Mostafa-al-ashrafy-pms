@@ -58,7 +58,7 @@ Compliance depth (ETA, MoI, ZATCA, Shomoos, NTMP, Hijri) is table stakes, not a 
 | --- | --- |
 | Dashboard does not show live occupancy | Dashboard computes from current room/reservation state, refreshes automatically |
 | Limited filtering | Reservation list supports status, date range, arrival/departure/in-house day and free-text search; UI ships saved filters |
-| Regressions after weekly updates | Test suite on every change (35 API tests), staged releases with release notes |
+| Regressions after weekly updates | Test suite on every change (59 API tests, including tenancy and inventory regressions), staged releases with release notes |
 | Room-category presentation issues | Room types carry sort order, description, occupancy limits; rack groups by type |
 
 ## Non-functional requirements

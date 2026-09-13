@@ -1,6 +1,7 @@
 import type { Property } from '@prisma/client';
 import { prisma, type Tx } from '../db.js';
 import { badRequest, conflict, notFound } from '../lib/errors.js';
+import { ownedIngredient, ownedSupplier, ownedWarehouse } from '../lib/ownership.js';
 import { round2 } from '../lib/money.js';
 import { emit } from './webhooks.js';
 
@@ -18,6 +19,8 @@ export async function stockOverview(property: Property) {
 export async function adjustStock(property: Property, args: { warehouseId: string; ingredientId: string; quantity: number; reason: string; note?: string }, tx: Tx | typeof prisma = prisma) {
   const wh = await tx.warehouse.findUnique({ where: { id: args.warehouseId } });
   if (!wh || wh.propertyId !== property.id) throw notFound('Warehouse', args.warehouseId);
+  const ing = await tx.ingredient.findUnique({ where: { id: args.ingredientId } });
+  if (!ing || ing.propertyId !== property.id) throw notFound('Ingredient', args.ingredientId);
   await tx.stockLevel.upsert({
     where: { warehouseId_ingredientId: { warehouseId: args.warehouseId, ingredientId: args.ingredientId } },
     update: { quantity: { increment: args.quantity } },
@@ -42,6 +45,11 @@ async function nextPoNumber(propertyId: string) {
 
 export async function createPurchaseOrder(property: Property, args: { supplierId: string; warehouseId: string; requestedBy?: string; expectedAt?: Date; notes?: string; lines: { ingredientId: string; quantity: number; unitCost: number }[] }) {
   if (args.lines.length === 0) throw badRequest('Purchase order needs lines');
+  // Every id that crosses into the create must belong to this property, or the PO read-back
+  // (which includes supplier, warehouse and ingredient rows) leaks another tenant's data.
+  await ownedSupplier(property, args.supplierId);
+  await ownedWarehouse(property, args.warehouseId);
+  for (const l of args.lines) await ownedIngredient(property, l.ingredientId);
   const total = round2(args.lines.reduce((s, l) => s + l.quantity * l.unitCost, 0));
   return prisma.purchaseOrder.create({
     data: {

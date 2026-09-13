@@ -19,7 +19,8 @@ The report's Section 14 pairs each Kwentra weakness with an opening. This codeba
 - **Transparent pricing** with published per-room, occupancy-based and group tiers, a real uptime SLA and 30-day
   cancellation, plus a public estimate calculator with the industry benchmarks from the report.
 - **Modern web app** (React, no jQuery/Bootstrap 3) with a live occupancy dashboard, room rack, saved filters.
-- **Public, documented REST + webhook API** (OpenAPI at `/docs`, HMAC-signed webhooks, scoped API keys).
+- **Public, documented REST + webhook API** (OpenAPI at `/docs`, HMAC-signed webhooks, scoped API keys stored
+  as digests, per-field tenancy checks on every foreign key).
 - **Compliance ledger** with adapters for Egypt ETA e-invoice/e-receipt and Ministry of Interior guest reporting,
   and Saudi ZATCA, Shomoos and NTMP. Submissions are queued automatically at check-in and folio close.
 - **Front Office parity**: room rack, out-of-order control, derived rates, restrictions, promo codes, hostel

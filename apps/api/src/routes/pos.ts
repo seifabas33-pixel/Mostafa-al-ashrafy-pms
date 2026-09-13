@@ -5,6 +5,7 @@ import { prisma } from '../db.js';
 import { requireProperty } from '../plugins/auth.js';
 import { propertyAndId, propertyParam } from '../lib/schemas.js';
 import { notFound } from '../lib/errors.js';
+import { ownedIngredient, ownedWarehouse } from '../lib/ownership.js';
 import { createOrder, menuCosting, payOrder, postToRoom, voidOrder } from '../services/pos.js';
 
 export async function posRoutes(fastify: FastifyInstance) {
@@ -17,6 +18,7 @@ export async function posRoutes(fastify: FastifyInstance) {
 
   app.post('/properties/:propertyId/outlets', { schema: { tags: ['pos'], params: propertyParam, body: z.object({ code: z.string(), name: z.string(), type: z.enum(['RESTAURANT', 'BAR', 'POOL_BAR', 'ROOM_SERVICE', 'SPA', 'SHOP', 'MINIBAR']).default('RESTAURANT'), warehouseId: z.string().optional() }) } }, async (req, reply) => {
     const p = await requireProperty(req, req.params.propertyId);
+    if (req.body.warehouseId) await ownedWarehouse(p, req.body.warehouseId);
     return reply.status(201).send(await prisma.outlet.create({ data: { ...req.body, propertyId: p.id } }));
   });
 
@@ -25,6 +27,7 @@ export async function posRoutes(fastify: FastifyInstance) {
     const outlet = await prisma.outlet.findUnique({ where: { id: req.params.id } });
     if (!outlet || outlet.propertyId !== p.id) throw notFound('Outlet', req.params.id);
     const { recipe, ...rest } = req.body;
+    for (const line of recipe) await ownedIngredient(p, line.ingredientId);
     return reply.status(201).send(await prisma.menuItem.create({ data: { ...rest, outletId: outlet.id, recipe: { create: recipe } }, include: { recipe: true } }));
   });
 

@@ -1,5 +1,6 @@
 import { createHmac } from 'node:crypto';
 import { prisma } from '../db.js';
+import { resolvePublicHost } from '../lib/safeUrl.js';
 
 export type WebhookEvent =
   | 'reservation.created'
@@ -73,6 +74,9 @@ export async function attemptDelivery(deliveryId: string) {
   if (process.env.WEBHOOKS_DISABLED === '1') return d;
   const signature = sign(d.subscription.secret, d.payload);
   try {
+    // Re-resolve the host on every attempt: a name that was public at subscription time can
+    // be re-pointed at an internal address later.
+    await resolvePublicHost(d.subscription.url);
     const controller = new AbortController();
     const timer = setTimeout(() => controller.abort(), 5000);
     const res = await fetch(d.subscription.url, {
@@ -80,6 +84,7 @@ export async function attemptDelivery(deliveryId: string) {
       headers: { 'content-type': 'application/json', 'x-pms-signature': signature, 'x-pms-event': d.event },
       body: d.payload,
       signal: controller.signal,
+      redirect: 'manual', // a public endpoint must not be able to bounce us to an internal one
     });
     clearTimeout(timer);
     return prisma.webhookDelivery.update({

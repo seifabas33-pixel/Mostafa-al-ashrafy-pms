@@ -32,7 +32,9 @@ const sandboxSubmit = (prefix: string) => async (payload: Record<string, unknown
 
 async function invoicePayload(property: Property, entityType: string, entityId: string) {
   if (entityType !== 'FOLIO') throw new Error('Invoice submissions require a FOLIO');
-  const folio = await prisma.folio.findUnique({ where: { id: entityId }, include: { guest: true, reservation: true } });
+  // Scoped by property as well as id: a submission row must never be able to resolve an
+  // entity belonging to another tenant, even if it was queued before that check existed.
+  const folio = await prisma.folio.findFirst({ where: { id: entityId, propertyId: property.id }, include: { guest: true, reservation: true } });
   if (!folio) throw notFound('Folio', entityId);
   const totals = await folioTotals(folio.id);
   return {
@@ -50,7 +52,7 @@ async function invoicePayload(property: Property, entityType: string, entityId: 
 
 async function guestPayload(property: Property, entityType: string, entityId: string) {
   if (entityType !== 'RESERVATION') throw new Error('Guest reporting requires a RESERVATION');
-  const r = await prisma.reservation.findUnique({ where: { id: entityId }, include: { guest: true, room: true } });
+  const r = await prisma.reservation.findFirst({ where: { id: entityId, propertyId: property.id }, include: { guest: true, room: true } });
   if (!r) throw notFound('Reservation', entityId);
   return {
     establishment: { name: property.name, city: property.city, country: property.country },

@@ -46,9 +46,12 @@ export function checkRestrictions(
   arrival: Date,
   departure: Date,
   today: Date,
+  opts: { dayUse?: boolean } = {},
 ): string[] {
   const problems: string[] = [];
-  const los = daysBetween(arrival, departure);
+  // A day-use stay sells one daytime slot rather than zero nights; treating it as length 0
+  // made every default rate plan (minLos 1) reject it.
+  const los = opts.dayUse ? 1 : daysBetween(arrival, departure);
   const lead = daysBetween(today, arrival);
   if (ratePlan.minLos > 0 && los < ratePlan.minLos) problems.push(`Minimum stay ${ratePlan.minLos} nights`);
   if (ratePlan.maxLos > 0 && los > ratePlan.maxLos) problems.push(`Maximum stay ${ratePlan.maxLos} nights`);
@@ -56,9 +59,14 @@ export function checkRestrictions(
   if (ratePlan.maxLeadDays > 0 && lead > ratePlan.maxLeadDays) problems.push(`Book at most ${ratePlan.maxLeadDays} days ahead`);
   for (const r of restrictions) {
     const day = formatDay(r.date);
+    // The departure date is not a night that is sold, so only closed-to-departure applies to
+    // it. Applying stop-sell or LOS there rejected otherwise valid stays.
+    if (!opts.dayUse && r.date.getTime() === departure.getTime()) {
+      if (r.ctd) problems.push(`Closed to departure on ${day}`);
+      continue;
+    }
     if (r.stopSell) problems.push(`Stop-sell on ${day}`);
     if (r.cta && r.date.getTime() === arrival.getTime()) problems.push(`Closed to arrival on ${day}`);
-    if (r.ctd && r.date.getTime() === departure.getTime()) problems.push(`Closed to departure on ${day}`);
     if (r.minLos > 0 && los < r.minLos) problems.push(`Minimum stay ${r.minLos} nights on ${day}`);
     if (r.maxLos > 0 && los > r.maxLos) problems.push(`Maximum stay ${r.maxLos} nights on ${day}`);
   }
