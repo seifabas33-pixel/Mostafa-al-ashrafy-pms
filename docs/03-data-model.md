@@ -1,6 +1,6 @@
 # 03 · Data model
 
-Full schema: `apps/api/prisma/schema.prisma` (46 models). Grouped by domain:
+Full schema: `apps/api/prisma/schema.prisma` (45 models). Grouped by domain:
 
 | Domain | Models | Notes |
 | --- | --- | --- |

@@ -10,7 +10,7 @@ to it, and for a final report. All three are in this repository:
 | Deliverable | Result |
 | --- | --- |
 | Scrubbed data | 17-page PDF extracted to `research/kwentra-research-report.md` (1,024 lines) and 14 structured JSON files in `research/data/` covering company, leadership, timeline, features, architecture, pricing and terms, compliance, partners, 30 named clients + 7 prospects, reviews, competitors, gaps, go-to-market, caveats and 36 sources |
-| Product built | A working multi-property hotel PMS: TypeScript API (46 data models, 98 documented routes), React web app (13 pages), demo seed with a Hurghada resort and a Makkah hotel, 35 passing automated tests |
+| Product built | A working multi-property hotel PMS: TypeScript API (45 data models, 98 documented endpoints across 126 operations), React web app (15 screens under 13 nav sections), demo seed with a Hurghada resort and a Makkah hotel, 35 passing automated tests |
 | Documentation | 8 documents in `docs/` (requirements with a Kwentra parity checklist, architecture, data model, compliance roadmap, pricing and terms, integration priorities, roadmap, API guide) plus this report |
 
 ## 2. How the report shaped the build
