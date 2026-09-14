@@ -46,6 +46,7 @@ npm run dev                 # API on :4000 (docs at /docs), web on :5173
 Dev API key: `pms_dev_key_ashrafy` (header `x-api-key`). The web app stores it in local storage.
 
 ```bash
+npm run doctor              # checks Node, dependencies, .env, database and ports before a local run
 npm test                    # API unit + integration tests (vitest, isolated SQLite test db)
 npm run typecheck           # both apps
 npm run build               # both apps
@@ -56,6 +57,16 @@ npm run build               # both apps
 Run both commands in a terminal **on your own machine**, in the folder you cloned the repository into.
 Everything is local: the API, the web app and the SQLite database all run on your computer, and
 `http://localhost:5173` only works in a browser on that same computer.
+
+If it will not start, run:
+
+```bash
+npm run doctor
+```
+
+It checks the Node version, the installed dependencies, `apps/api/.env`, the generated Prisma client, the
+seeded demo database and both ports, then prints the first thing that is actually wrong and the command
+that fixes it. It changes nothing, so it is always safe to run.
 
 | Symptom | Cause and fix |
 | --- | --- |
