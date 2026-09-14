@@ -72,7 +72,7 @@ that fixes it. It changes nothing, so it is always safe to run.
 | --- | --- |
 | `npm run setup` fails with syntax errors, or `Unsupported engine` | Node is too old. Run `node -v`; it must be 22 or newer. Install the current LTS from nodejs.org, close the terminal, reopen it and try again. |
 | `prisma: not found` or `vite: not found` | Dependencies are not installed. Run `npm install` in the repository root first, then `npm run setup`. |
-| `EADDRINUSE` on 4000 or 5173 | Something else is using the port. Stop it, or start the API on another port with `PORT=4001 npm run dev -w apps/api`. |
+| `EADDRINUSE`, or `Port 5173 is already in use` | An earlier `npm run dev` is still running in another terminal. Close it, or `lsof -ti:5173 \| xargs kill` (`lsof -ti:4000` for the API). The web server is pinned to 5173 on purpose and refuses to start elsewhere, so it can never end up quietly serving on 5174 while you are looking at 5173. |
 | `prisma db push` warns that data will be lost | The demo database predates a schema change. Delete `apps/api/prisma/dev.db` and run `npm run setup` again; it only holds demo data. |
 | The browser shows nothing at `localhost:5173` | Check the terminal running `npm run dev` is still open and shows no errors. Both servers stop when you close that terminal. |
 | The app loads but every panel says unauthorised | The API key in Settings does not match the seeded one. Set it back to `pms_dev_key_ashrafy`, or re-run `npm run db:seed`. |
