@@ -104,7 +104,10 @@ model ApiKey {
   id         String    @id @default(cuid())
   orgId      String
   name       String
-  key        String    @unique
+  // SHA-256 of the key. The plaintext is shown once at creation and never stored, so a
+  // database copy yields no usable credentials.
+  keyHash    String    @unique
+  keyPrefix  String // non-secret leading fragment, for recognising a key in listings
   scopes     String    @default("read,write") // comma-separated: read, write, admin
   active     Boolean   @default(true)
   lastUsedAt DateTime?

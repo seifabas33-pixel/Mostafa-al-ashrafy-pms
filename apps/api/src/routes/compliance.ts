@@ -5,6 +5,7 @@ import { prisma } from '../db.js';
 import { requireProperty } from '../plugins/auth.js';
 import { complianceType, propertyAndId, propertyParam } from '../lib/schemas.js';
 import { notFound } from '../lib/errors.js';
+import { ownedComplianceEntity } from '../lib/ownership.js';
 import { adapters, process as processSubmission, processPending, queue, requiredTypes } from '../services/compliance.js';
 
 export async function complianceRoutes(fastify: FastifyInstance) {
@@ -18,7 +19,11 @@ export async function complianceRoutes(fastify: FastifyInstance) {
     return { required: { onCheckIn: requiredTypes(p, 'CHECK_IN'), onFolioClose: requiredTypes(p, 'FOLIO_CLOSED') }, submissions: rows.map((r) => ({ ...r, payload: JSON.parse(r.payload), response: JSON.parse(r.response) })) };
   });
 
-  app.post('/properties/:propertyId/compliance', { schema: { tags: ['compliance'], params: propertyParam, body: z.object({ type: complianceType, entityType: z.enum(['FOLIO', 'RESERVATION']), entityId: z.string() }), description: 'Queue a submission manually (e.g. a credit note)' } }, async (req, reply) => reply.status(201).send(await queue(await requireProperty(req, req.params.propertyId), req.body.type, req.body.entityType, req.body.entityId)));
+  app.post('/properties/:propertyId/compliance', { schema: { tags: ['compliance'], params: propertyParam, body: z.object({ type: complianceType, entityType: z.enum(['FOLIO', 'RESERVATION']), entityId: z.string() }), description: 'Queue a submission manually (e.g. a credit note). The entity must belong to this property.' } }, async (req, reply) => {
+    const p = await requireProperty(req, req.params.propertyId);
+    await ownedComplianceEntity(p, req.body.entityType, req.body.entityId);
+    return reply.status(201).send(await queue(p, req.body.type, req.body.entityType, req.body.entityId));
+  });
 
   app.post('/properties/:propertyId/compliance/process', { schema: { tags: ['compliance'], params: propertyParam, description: 'Process all PENDING submissions through their adapters' } }, async (req) => processPending(await requireProperty(req, req.params.propertyId)));
 

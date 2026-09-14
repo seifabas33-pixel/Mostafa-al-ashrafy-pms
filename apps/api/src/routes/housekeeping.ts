@@ -6,6 +6,7 @@ import { requireProperty } from '../plugins/auth.js';
 import { dayString, propertyAndId, propertyParam } from '../lib/schemas.js';
 import { parseDay } from '../lib/dates.js';
 import { notFound } from '../lib/errors.js';
+import { ownedRoom } from '../lib/ownership.js';
 import { emit } from '../services/webhooks.js';
 
 export async function housekeepingRoutes(fastify: FastifyInstance) {
@@ -23,6 +24,7 @@ export async function housekeepingRoutes(fastify: FastifyInstance) {
   app.post('/properties/:propertyId/housekeeping/tasks', { schema: { tags: ['housekeeping'], params: propertyParam, body: z.object({ roomId: z.string(), type: z.enum(['CLEAN', 'INSPECT', 'TURNDOWN', 'MAINTENANCE', 'DEEP_CLEAN']).default('CLEAN'), priority: z.enum(['LOW', 'NORMAL', 'HIGH', 'RUSH']).default('NORMAL'), assignedTo: z.string().optional(), notes: z.string().default(''), dueDate: dayString.optional() }) } }, async (req, reply) => {
     const p = await requireProperty(req, req.params.propertyId);
     const { dueDate, ...rest } = req.body;
+    await ownedRoom(p, rest.roomId);
     return reply.status(201).send(await prisma.housekeepingTask.create({ data: { ...rest, propertyId: p.id, dueDate: dueDate ? parseDay(dueDate) : p.businessDate } }));
   });
 
@@ -37,15 +39,18 @@ export async function housekeepingRoutes(fastify: FastifyInstance) {
       if (req.body.status === 'IN_PROGRESS') data.startedAt = new Date();
       if (req.body.status === 'DONE') data.doneAt = new Date();
       const updated = await prisma.housekeepingTask.update({ where: { id: t.id }, data });
-      if (req.body.status === 'IN_PROGRESS' && t.type !== 'MAINTENANCE') await prisma.room.update({ where: { id: t.roomId }, data: { hkStatus: 'IN_PROGRESS' } });
+      // Scope the room writes to this property as well as the task, so a task row that
+      // predates the ownership check above can never reach another property's room.
+      if (req.body.status === 'IN_PROGRESS' && t.type !== 'MAINTENANCE') await prisma.room.updateMany({ where: { id: t.roomId, propertyId: p.id }, data: { hkStatus: 'IN_PROGRESS' } });
       if (req.body.status === 'DONE') {
         const roomData: Record<string, unknown> = {};
         if (t.type === 'CLEAN' || t.type === 'DEEP_CLEAN' || t.type === 'TURNDOWN') roomData.hkStatus = 'CLEAN';
         if (t.type === 'INSPECT') roomData.hkStatus = 'INSPECTED';
         if (t.type === 'MAINTENANCE' && t.room.status === 'OUT_OF_ORDER') roomData.status = 'VACANT';
         if (Object.keys(roomData).length) {
-          const room = await prisma.room.update({ where: { id: t.roomId }, data: roomData });
-          void emit(p.orgId, 'room.status_changed', { roomId: room.id, status: room.status, hkStatus: room.hkStatus });
+          await prisma.room.updateMany({ where: { id: t.roomId, propertyId: p.id }, data: roomData });
+          const room = await prisma.room.findUnique({ where: { id: t.roomId } });
+          if (room) void emit(p.orgId, 'room.status_changed', { roomId: room.id, status: room.status, hkStatus: room.hkStatus });
         }
         void emit(p.orgId, 'housekeeping.task_done', { taskId: t.id, roomId: t.roomId, type: t.type });
       }

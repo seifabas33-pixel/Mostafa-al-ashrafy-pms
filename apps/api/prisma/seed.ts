@@ -7,6 +7,7 @@
  * Dev API key: pms_dev_key_ashrafy (header x-api-key)
  */
 import { PrismaClient } from '@prisma/client';
+import { apiKeyPrefix, hashApiKey } from '../src/lib/ids.js';
 
 const prisma = new PrismaClient();
 const DAY = 86_400_000;
@@ -29,8 +30,13 @@ async function main() {
   const today = day(0);
 
   const org = await prisma.organization.create({ data: { name: 'Ashrafy Hospitality Group', slug: 'ashrafy', currency: 'EGP' } });
-  await prisma.apiKey.create({ data: { orgId: org.id, name: 'Development key', key: 'pms_dev_key_ashrafy', scopes: 'read,write,admin' } });
-  await prisma.apiKey.create({ data: { orgId: org.id, name: 'Read-only integration', key: 'pms_readonly_key', scopes: 'read' } });
+  // Keys are stored hashed; these plaintext values are what you send in x-api-key.
+  for (const [name, key, scopes] of [
+    ['Development key', 'pms_dev_key_ashrafy', 'read,write,admin'],
+    ['Read-only integration', 'pms_readonly_key', 'read'],
+  ] as const) {
+    await prisma.apiKey.create({ data: { orgId: org.id, name, keyHash: hashApiKey(key), keyPrefix: apiKeyPrefix(key), scopes } });
+  }
   await prisma.user.createMany({
     data: [
       { orgId: org.id, email: 'owner@ashrafy.example', name: 'Mostafa Al Ashrafy', role: 'OWNER' },

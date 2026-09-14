@@ -3,9 +3,10 @@ import type { ZodTypeProvider } from 'fastify-type-provider-zod';
 import { randomBytes } from 'node:crypto';
 import { z } from 'zod';
 import { prisma } from '../db.js';
-import { requireOrg } from '../plugins/auth.js';
+import { requireOrg, requireScope } from '../plugins/auth.js';
 import { idParam } from '../lib/schemas.js';
-import { apiKeyString } from '../lib/ids.js';
+import { apiKeyPrefix, apiKeyString, hashApiKey } from '../lib/ids.js';
+import { assertAllowedWebhookUrl } from '../lib/safeUrl.js';
 import { notFound } from '../lib/errors.js';
 import { attemptDelivery, WEBHOOK_EVENTS } from '../services/webhooks.js';
 
@@ -19,7 +20,8 @@ export async function webhookRoutes(fastify: FastifyInstance) {
     return subs.map((s) => ({ ...s, secret: undefined, events: s.events.split(',') }));
   });
 
-  app.post('/webhooks', { schema: { tags: ['webhooks'], body: z.object({ url: z.string().url(), events: z.array(z.string()).min(1) }), description: 'Create a subscription; the returned secret signs every delivery (HMAC-SHA256 in x-pms-signature)' } }, async (req, reply) => {
+  app.post('/webhooks', { schema: { tags: ['webhooks'], body: z.object({ url: z.string().url(), events: z.array(z.string()).min(1) }), description: 'Create a subscription; the returned secret signs every delivery (HMAC-SHA256 in x-pms-signature). The url must be https and must not resolve to a private address.' } }, async (req, reply) => {
+    assertAllowedWebhookUrl(req.body.url);
     const sub = await prisma.webhookSubscription.create({ data: { orgId: requireOrg(req), url: req.body.url, events: req.body.events.join(','), secret: randomBytes(24).toString('hex') } });
     return reply.status(201).send({ ...sub, events: req.body.events });
   });
@@ -44,13 +46,29 @@ export async function webhookRoutes(fastify: FastifyInstance) {
     return attemptDelivery(d.id);
   });
 
-  // API keys (admin scope)
-  app.get('/api-keys', { schema: { tags: ['webhooks'] } }, async (req) => {
+  // API keys. Minting and listing credentials require the admin scope, so a leaked write-only
+  // key cannot escalate itself by issuing a new admin key.
+  app.get('/api-keys', { schema: { tags: ['webhooks'], description: 'List keys. Only the non-secret prefix is returned; the full key is shown once at creation.' } }, async (req) => {
+    requireScope(req, 'admin');
     const keys = await prisma.apiKey.findMany({ where: { orgId: requireOrg(req) } });
-    return keys.map((k) => ({ ...k, key: `${k.key.slice(0, 8)}…` }));
+    return keys.map(({ keyHash, ...k }) => ({ ...k, key: `${k.keyPrefix}…` }));
   });
-  app.post('/api-keys', { schema: { tags: ['webhooks'], body: z.object({ name: z.string(), scopes: z.array(z.enum(['read', 'write', 'admin'])).default(['read', 'write']) }) } }, async (req, reply) => {
-    const k = await prisma.apiKey.create({ data: { orgId: requireOrg(req), name: req.body.name, scopes: req.body.scopes.join(','), key: apiKeyString() } });
-    return reply.status(201).send(k);
+
+  app.post('/api-keys', { schema: { tags: ['webhooks'], body: z.object({ name: z.string(), scopes: z.array(z.enum(['read', 'write', 'admin'])).default(['read', 'write']) }), description: 'Mint a key. The plaintext is returned once here and never stored; only its SHA-256 digest is kept.' } }, async (req, reply) => {
+    requireScope(req, 'admin');
+    const key = apiKeyString();
+    const created = await prisma.apiKey.create({
+      data: { orgId: requireOrg(req), name: req.body.name, scopes: req.body.scopes.join(','), keyHash: hashApiKey(key), keyPrefix: apiKeyPrefix(key) },
+    });
+    const { keyHash, ...rest } = created;
+    return reply.status(201).send({ ...rest, key });
+  });
+
+  app.delete('/api-keys/:id', { schema: { tags: ['webhooks'], params: idParam, description: 'Revoke a key' } }, async (req) => {
+    requireScope(req, 'admin');
+    const k = await prisma.apiKey.findUnique({ where: { id: req.params.id } });
+    if (!k || k.orgId !== requireOrg(req)) throw notFound('API key', req.params.id);
+    await prisma.apiKey.update({ where: { id: k.id }, data: { active: false } });
+    return { revoked: true };
   });
 }

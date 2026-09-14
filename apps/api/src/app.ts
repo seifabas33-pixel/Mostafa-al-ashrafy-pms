@@ -3,6 +3,7 @@ import cors from '@fastify/cors';
 import swagger from '@fastify/swagger';
 import swaggerUi from '@fastify/swagger-ui';
 import { Prisma } from '@prisma/client';
+import { initDb } from './db.js';
 import { hasZodFastifySchemaValidationErrors, jsonSchemaTransform, serializerCompiler, validatorCompiler, type ZodTypeProvider } from 'fastify-type-provider-zod';
 import { authPlugin } from './plugins/auth.js';
 import { AppError } from './lib/errors.js';
@@ -24,6 +25,7 @@ import { webhookRoutes } from './routes/webhooks.js';
 import { publicRoutes } from './routes/public.js';
 
 export async function buildApp(opts: { logger?: boolean } = {}) {
+  await initDb();
   const app = Fastify({ logger: opts.logger ?? false }).withTypeProvider<ZodTypeProvider>();
   app.setValidatorCompiler(validatorCompiler);
   app.setSerializerCompiler(serializerCompiler);
@@ -72,10 +74,19 @@ export async function buildApp(opts: { logger?: boolean } = {}) {
     if (err instanceof Prisma.PrismaClientKnownRequestError) {
       if (err.code === 'P2002') return reply.status(409).send({ error: { code: 'DUPLICATE', message: 'A record with the same unique value already exists', details: err.meta } });
       if (err.code === 'P2025') return reply.status(404).send({ error: { code: 'NOT_FOUND', message: 'Record not found' } });
+      // Foreign key violation: an id in the request does not point at anything real.
+      if (err.code === 'P2003') return reply.status(400).send({ error: { code: 'INVALID_REFERENCE', message: 'A referenced record does not exist' } });
+    }
+    if (err instanceof Prisma.PrismaClientValidationError) {
+      app.log.error(err);
+      return reply.status(400).send({ error: { code: 'INVALID_REQUEST', message: 'Request could not be processed' } });
     }
     const status = (err as { statusCode?: number }).statusCode ?? 500;
-    if (status >= 500) app.log.error(err);
-    return reply.status(status).send({ error: { code: status >= 500 ? 'INTERNAL' : 'ERROR', message: (err as Error).message } });
+    if (status < 500) return reply.status(status).send({ error: { code: 'ERROR', message: (err as Error).message } });
+    // Never echo an unhandled error to the client: Prisma messages carry model, field and
+    // constraint names. The detail stays in the server log, addressable by request id.
+    app.log.error(err);
+    return reply.status(status).send({ error: { code: 'INTERNAL', message: 'Internal server error', details: { requestId: _req.id } } });
   });
 
   app.get('/openapi.json', { schema: { hide: true } }, async () => app.swagger());

@@ -6,9 +6,12 @@ import { fileURLToPath } from 'node:url';
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 
 export default function setup() {
-  mkdirSync(resolve(root, 'test'), { recursive: true });
-  // The test database is a throwaway file created here; remove any previous run's copy.
-  for (const suffix of ['', '-journal', '-wal', '-shm']) rmSync(resolve(root, `test/test.db${suffix}`), { force: true });
+  // Prisma resolves a relative SQLite `file:` URL against the SCHEMA directory, so
+  // DATABASE_URL=file:./test/test.db lands in apps/api/prisma/test, not apps/api/test.
+  // Deleting the wrong path silently reused the previous run's database.
+  const dbDir = resolve(root, 'prisma', 'test');
+  mkdirSync(dbDir, { recursive: true });
+  for (const suffix of ['', '-journal', '-wal', '-shm']) rmSync(resolve(dbDir, `test.db${suffix}`), { force: true });
   execSync('npx prisma db push --skip-generate', {
     cwd: root,
     stdio: 'inherit',

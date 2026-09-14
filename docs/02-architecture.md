@@ -55,7 +55,18 @@ fiscal payloads (ETA, ZATCA) are exact.
 
 ### Security
 
-- API keys per organisation with `read`, `write`, `admin` scopes; `lastUsedAt` tracking.
+- API keys per organisation with `read`, `write`, `admin` scopes (`admin` implies `write`, `write` implies
+  `read`); `lastUsedAt` tracking. Keys are stored as a SHA-256 digest alongside a non-secret prefix, so a
+  database copy yields no usable credential; the plaintext is returned once at creation. Minting, listing and
+  revoking keys require the `admin` scope, so a leaked write key cannot escalate itself.
+- Tenancy is enforced twice: `requireProperty` proves the property in the URL belongs to the caller, and
+  `lib/ownership.ts` proves every foreign key in the request body belongs to that same tenant. Without the
+  second check a caller can attach another tenant's row to their own record and read it back through an
+  `include`.
+- Webhook targets are restricted to public https endpoints, re-resolved before every delivery and sent with
+  redirects disabled, so a subscription cannot be pointed at the internal network.
+- Unhandled errors return a generic message and a request id; the detail stays in the server log, because
+  database errors carry model, field and constraint names.
 - Webhook deliveries signed with HMAC-SHA256 (`x-pms-signature`).
 - Audit log on every state change; no PII in logs beyond names needed for operations.
 - Staff authentication (sessions, MFA, per-screen permissions) is a roadmap item; API keys are the day-one
