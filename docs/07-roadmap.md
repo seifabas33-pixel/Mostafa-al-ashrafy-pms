@@ -13,6 +13,12 @@ The research report's reading order for the team was: §3 feature parity, §8 co
 
 ## v0.2 · Pilot-ready (6–8 weeks)
 
+- **Property-local times in the UI.** Every date helper currently renders in UTC, while each property
+  carries a configured timezone, so audit, POS, compliance and activity times are shifted from the
+  hotel's own clock. Needs a timezone-aware formatter rather than per-call-site patches.
+- **Occupancy limits and bed counts on the public booking form.** The room type's `maxAdults` and
+  `maxChildren` are not enforced, and a per-bed dorm booking always submits one bed. Needs a bed-count
+  control plus server-side enforcement on the public create path.
 - Staff authentication: email/password + TOTP MFA, roles → per-screen permissions, session audit.
 - ETA e-invoice adapter against the ETA SDK sandbox; MoI report format confirmed with a pilot hotel.
 - Paymob and Kashier payment capture on the booking engine and folio; BNPL via Sympl.
