@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { api, errorMessage, prop } from '../api';
-import { Async, Badge, Button, Card, Empty, Field, Input, PageHeader, Select, Textarea } from '../components/ui';
+import { Async, Badge, Button, Card, Empty, Field, Input, PageHeader, Select, Textarea, clickable } from '../components/ui';
 import { useProperty, useToast } from '../context';
 import { addDays, day, diffDays, money } from '../format';
 import { useApi } from '../hooks';
@@ -213,7 +213,7 @@ export function NewReservationPage() {
             ) : (
               <div className="stack">
                 {quotes.map((q) => (
-                  <div key={q.plan.id} className={`offer ${q.plan.id === ratePlanId ? 'selected' : ''} ${q.quote ? '' : 'faint'}`} onClick={() => q.quote && setRatePlanId(q.plan.id)}>
+                  <div key={q.plan.id} className={`offer ${q.plan.id === ratePlanId ? 'selected' : ''} ${q.quote ? '' : 'faint'}`} {...clickable(() => setRatePlanId(q.plan.id), !q.quote)}>
                     <div>
                       <div className="strong">
                         {q.plan.code} · {q.plan.name}

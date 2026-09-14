@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { api, prop } from '../api';
-import { Async, Badge, Button, Card, Drawer, Empty, Field, Input, PageHeader, Select, StatusBadge } from '../components/ui';
+import { Async, Badge, Button, Card, Drawer, Empty, Field, Input, PageHeader, Select, StatusBadge, clickable } from '../components/ui';
 import { useProperty, useToast } from '../context';
 import { addDays, day, money, shortDate, timeOf, titleCase, weekday } from '../format';
 import { useApi } from '../hooks';
@@ -42,7 +42,7 @@ export function ActivitiesPage() {
     const r = await toast.run(() => api.post<Signup>(prop(property.id, `/sessions/${session.sessionId}/signups`), { reservationId: signup.reservationId || undefined, pax: signup.pax, postToFolio: signup.postToFolio }), 'Guest signed up');
     setBusy(null);
     if (r) {
-      if (r.status === 'WAITLISTED') toast.push('Session is full: guest was waitlisted', 'info');
+      if (r.status === 'WAITLIST') toast.push('Session is full: guest was waitlisted', 'info');
       signups.reload();
       programme.reload();
       setSignup({ reservationId: '', pax: 1, postToFolio: true });
@@ -112,7 +112,7 @@ export function ActivitiesPage() {
                           {d.sessions
                             .filter((s) => timeOf(s.startsAt) === t)
                             .map((s) => (
-                              <div key={s.sessionId} className={`session-chip ${s.remaining <= 0 ? 'full' : ''} ${s.status === 'CANCELLED' ? 'cancelled' : ''}`} onClick={() => setSession(s)} role="button" title={`${s.name} · ${s.location}`}>
+                              <div key={s.sessionId} className={`session-chip ${s.remaining <= 0 ? 'full' : ''} ${s.status === 'CANCELLED' ? 'cancelled' : ''}`} {...clickable(() => setSession(s))} title={`${s.name} · ${s.location}`}>
                                 <div className="strong">{s.name}</div>
                                 <div className="cap">
                                   {s.booked}/{s.capacity} booked · {s.location}
@@ -254,7 +254,7 @@ export function ActivitiesPage() {
                         </div>
                         <div className="row">
                           <StatusBadge status={s.status} />
-                          {(s.status === 'BOOKED' || s.status === 'WAITLISTED') && (
+                          {(s.status === 'BOOKED' || s.status === 'WAITLIST') && (
                             <>
                               <Button size="sm" busy={busy === s.id} onClick={() => setStatus(s, 'ATTENDED')}>
                                 Attended

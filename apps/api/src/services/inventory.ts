@@ -87,6 +87,12 @@ export async function receivePurchaseOrder(property: Property, id: string, recei
       const line = po.lines.find((l) => l.id === r.lineId);
       if (!line) throw notFound('PO line', r.lineId);
       if (r.quantity <= 0) continue;
+      // Never receive more than was ordered: an over-receipt silently inflates stock and
+      // leaves receivedQty above quantity, which no later correction reconciles.
+      const outstanding = round2(line.quantity - line.receivedQty);
+      if (r.quantity > outstanding) {
+        throw badRequest(`Cannot receive ${r.quantity} of ${line.ingredientId}: only ${outstanding} outstanding on this line`, { lineId: line.id, ordered: line.quantity, alreadyReceived: line.receivedQty, outstanding });
+      }
       await tx.purchaseOrderLine.update({ where: { id: line.id }, data: { receivedQty: { increment: r.quantity } } });
       await adjustStock(property, { warehouseId: po.warehouseId, ingredientId: line.ingredientId, quantity: r.quantity, reason: 'PO_RECEIPT', note: po.number }, tx);
       await tx.ingredient.update({ where: { id: line.ingredientId }, data: { costPerUnit: line.unitCost } });

@@ -418,7 +418,7 @@ export interface Signup {
   guestId: string | null;
   reservationId: string | null;
   pax: number;
-  status: 'BOOKED' | 'WAITLISTED' | 'ATTENDED' | 'NO_SHOW' | 'CANCELLED' | string;
+  status: 'BOOKED' | 'WAITLIST' | 'ATTENDED' | 'NO_SHOW' | 'CANCELLED' | string;
   folioLineId: string | null;
   createdAt: string;
   guest?: Guest | null;

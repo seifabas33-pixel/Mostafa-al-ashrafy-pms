@@ -23,6 +23,8 @@ export function PosPage() {
   const [allergyNotes, setAllergyNotes] = useState('');
   const [category, setCategory] = useState('');
   const [busy, setBusy] = useState<string | null>(null);
+  // An order created but not yet settled, so a retry reuses it instead of creating another.
+  const [pending, setPending] = useState<PosOrder | null>(null);
   const [tab, setTab] = useState<'orders' | 'costing'>('orders');
 
   const outlets = useApi(() => api.get<Outlet[]>(prop(property.id, '/outlets')), [property.id]);
@@ -33,6 +35,11 @@ export function PosPage() {
   useEffect(() => {
     if (outlets.data?.length && !outlets.data.some((o) => o.id === outletId)) setOutletId(outlets.data.find((o) => o.active)?.id ?? outlets.data[0].id);
   }, [outlets.data, outletId]);
+
+  // Editing the order after a failed settle must not re-settle the stale one.
+  useEffect(() => {
+    setPending(null);
+  }, [cart, covers, kitchenNotes, allergyNotes, outletId]);
 
   const outlet = outlets.data?.find((o) => o.id === outletId);
   const categories = useMemo(() => [...new Set((outlet?.menuItems ?? []).map((m) => m.category))], [outlet]);
@@ -53,8 +60,14 @@ export function PosPage() {
     setCart((c) => c.map((l) => (l.item.id === id ? { ...l, quantity: q } : l)).filter((l) => l.quantity > 0));
   }
 
-  async function createOrder(): Promise<PosOrder | undefined> {
-    return api.post<PosOrder>(prop(property.id, '/pos/orders'), {
+  /**
+   * Settling is two requests: create the order, then post or pay it. If the second fails
+   * (say the room has no checked-in guest) the created order is already OPEN, so a retry
+   * must reuse it rather than creating another. Otherwise each attempt leaves an orphan.
+   */
+  async function pendingOrder(): Promise<PosOrder> {
+    if (pending) return pending;
+    const created = await api.post<PosOrder>(prop(property.id, '/pos/orders'), {
       outletId,
       roomId: roomId || undefined,
       covers,
@@ -62,6 +75,8 @@ export function PosPage() {
       allergyNotes,
       lines: cart.map((l) => ({ menuItemId: l.item.id, quantity: l.quantity })),
     });
+    setPending(created);
+    return created;
   }
 
   function reset() {
@@ -69,6 +84,7 @@ export function PosPage() {
     setKitchenNotes('');
     setAllergyNotes('');
     setCovers(1);
+    setPending(null);
     orders.reload();
     rooms.reload();
   }
@@ -77,8 +93,8 @@ export function PosPage() {
     if (!roomId) return toast.push('Choose an occupied room first', 'error');
     setBusy('room');
     const r = await toast.run(async () => {
-      const o = await createOrder();
-      return api.post<PosOrder>(prop(property.id, `/pos/orders/${o!.id}/post-to-room`), { roomId });
+      const o = await pendingOrder();
+      return api.post<PosOrder>(prop(property.id, `/pos/orders/${o.id}/post-to-room`), { roomId });
     }, 'Posted to the guest folio');
     setBusy(null);
     if (r) reset();
@@ -87,8 +103,8 @@ export function PosPage() {
   async function pay(method: 'CASH' | 'CARD' | 'BNPL') {
     setBusy(method);
     const r = await toast.run(async () => {
-      const o = await createOrder();
-      return api.post<PosOrder>(prop(property.id, `/pos/orders/${o!.id}/pay`), { method });
+      const o = await pendingOrder();
+      return api.post<PosOrder>(prop(property.id, `/pos/orders/${o.id}/pay`), { method });
     }, `Paid by ${method.toLowerCase()}`);
     setBusy(null);
     if (r) reset();

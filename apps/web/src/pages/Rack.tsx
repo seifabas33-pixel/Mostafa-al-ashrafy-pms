@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { api, prop } from '../api';
 import { ReservationActions } from '../components/ReservationActions';
-import { Badge, Button, Drawer, ErrorBox, Input, KeyValue, Loading, StatusBadge } from '../components/ui';
+import { Badge, Button, Drawer, ErrorBox, Input, KeyValue, Loading, StatusBadge, clickable } from '../components/ui';
 import { useProperty, useToast } from '../context';
 import { addDays, day, diffDays, money, shortDate, weekday } from '../format';
 import { useApi } from '../hooks';
@@ -298,7 +298,7 @@ function BarEl({ bar, onSelect, unassigned }: { bar: Bar; onSelect: (r: Reservat
   const r = bar.r;
   const label = `${r.guest.firstName} ${r.guest.lastName}`;
   return (
-    <div className={`rack-bar ${bar.tone} ${unassigned ? 'unassigned' : ''}`} style={{ left: bar.left, width: bar.width }} title={`${r.confirmationNumber} · ${label} · ${day(r.arrival)} → ${day(r.departure)} · ${r.status}`} onClick={() => onSelect(r)} role="button">
+    <div className={`rack-bar ${bar.tone} ${unassigned ? 'unassigned' : ''}`} style={{ left: bar.left, width: bar.width }} title={`${r.confirmationNumber} · ${label} · ${day(r.arrival)} → ${day(r.departure)} · ${r.status}`} {...clickable(() => onSelect(r))}>
       {r.guest.vip ? '★ ' : ''}
       {label}
     </div>

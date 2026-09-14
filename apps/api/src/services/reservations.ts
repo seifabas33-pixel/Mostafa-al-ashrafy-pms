@@ -278,8 +278,12 @@ export async function listReservations(
     where.departure = { gt: d };
   }
   if (q.from && q.to) {
+    const from = parseDay(q.from);
     where.arrival = { lt: parseDay(q.to) };
-    where.departure = { gt: parseDay(q.from) };
+    // Day-use stays are stored with departure === arrival, so a plain `departure > from`
+    // drops them from a window starting on their own date — which is what hid them from
+    // the room rack.
+    where.OR = [{ departure: { gt: from } }, { dayUse: true, arrival: { gte: from } }];
   }
   if (q.search) {
     where.OR = [

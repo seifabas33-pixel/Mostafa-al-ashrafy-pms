@@ -197,6 +197,41 @@ describe('revenue capture', () => {
   });
 });
 
+describe('reservation listing', () => {
+  it('includes a day-use stay in a window that starts on its own date (the room rack)', async () => {
+    const r = await api('POST', `${P()}/reservations`, {
+      guestId: f.guest.id, roomTypeId: f.std.id, ratePlanId: f.bar.id,
+      arrival: '2026-12-20', departure: '2026-12-20', dayUse: true,
+    });
+    expect(r.status).toBe(201);
+    const sameDay = await api('GET', `${P()}/reservations?from=2026-12-20&to=2026-12-21`);
+    expect(sameDay.body.map((x: { id: string }) => x.id)).toContain(r.body.id);
+  });
+});
+
+describe('purchase-order receiving', () => {
+  it('refuses to receive more than was ordered', async () => {
+    const po = await api('POST', `${P()}/purchase-orders`, {
+      supplierId: f.supplier.id, warehouseId: f.warehouse.id,
+      lines: [{ ingredientId: f.chicken.id, quantity: 10, unitCost: 100 }],
+    });
+    expect(po.status).toBe(201);
+    await api('POST', `${P()}/purchase-orders/${po.body.id}/approve`, {});
+    const lineId = po.body.lines[0].id;
+
+    const before = await prisma.stockLevel.findUniqueOrThrow({ where: { warehouseId_ingredientId: { warehouseId: f.warehouse.id, ingredientId: f.chicken.id } } });
+    const tooMany = await api('POST', `${P()}/purchase-orders/${po.body.id}/receive`, { receipts: [{ lineId, quantity: 11 }] });
+    expect(tooMany.status).toBe(400);
+    const after = await prisma.stockLevel.findUniqueOrThrow({ where: { warehouseId_ingredientId: { warehouseId: f.warehouse.id, ingredientId: f.chicken.id } } });
+    expect(after.quantity).toBe(before.quantity); // rejected, not partially applied
+
+    // Receiving in two valid instalments still works, and the second over-receipt is caught.
+    expect((await api('POST', `${P()}/purchase-orders/${po.body.id}/receive`, { receipts: [{ lineId, quantity: 6 }] })).body.status).toBe('PARTIALLY_RECEIVED');
+    expect((await api('POST', `${P()}/purchase-orders/${po.body.id}/receive`, { receipts: [{ lineId, quantity: 5 }] })).status).toBe(400);
+    expect((await api('POST', `${P()}/purchase-orders/${po.body.id}/receive`, { receipts: [{ lineId, quantity: 4 }] })).body.status).toBe('RECEIVED');
+  });
+});
+
 describe('dates', () => {
   it('keeps the business date and stay window in one calendar', async () => {
     expect(formatDay(parseDay(BUSINESS_DATE))).toBe(BUSINESS_DATE);

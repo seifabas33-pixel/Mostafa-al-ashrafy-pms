@@ -83,15 +83,29 @@ export function useApi<T>(fetcher: () => Promise<T>, deps: unknown[], opts: { re
   return { data, error, loading, refreshing, reload, setData };
 }
 
+function readStored<T>(key: string, initial: T): T {
+  try {
+    const raw = localStorage.getItem(key);
+    return raw === null ? initial : (JSON.parse(raw) as T);
+  } catch {
+    return initial;
+  }
+}
+
+/**
+ * Local-storage backed state. The key may change at runtime (several callers scope it by
+ * property id), so the stored value is re-read whenever it does; otherwise switching
+ * property would keep showing, and submitting, the previous property's setting.
+ */
 export function useLocalStorage<T>(key: string, initial: T): [T, (v: T | ((p: T) => T)) => void] {
-  const [value, setValue] = useState<T>(() => {
-    try {
-      const raw = localStorage.getItem(key);
-      return raw === null ? initial : (JSON.parse(raw) as T);
-    } catch {
-      return initial;
-    }
-  });
+  const [value, setValue] = useState<T>(() => readStored(key, initial));
+  const initialRef = useRef(initial);
+  const firstKey = useRef(key);
+  useEffect(() => {
+    if (key === firstKey.current) return; // already loaded by the initialiser
+    firstKey.current = key;
+    setValue(readStored(key, initialRef.current));
+  }, [key]);
   const set = useCallback(
     (v: T | ((p: T) => T)) => {
       setValue((prev) => {

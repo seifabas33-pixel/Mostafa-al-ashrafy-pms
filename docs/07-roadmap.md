@@ -6,7 +6,7 @@ The research report's reading order for the team was: §3 feature parity, §8 co
 ## Delivered in this repository (v0.1)
 
 - Research scrubbed into `research/data` (14 JSON files) and the full report text.
-- Data model (45 models), API (98 documented endpoints / 126 operations, OpenAPI), 59 automated tests, seed
+- Data model (45 models), API (98 documented endpoints / 126 operations, OpenAPI), 61 automated tests, seed
   with two properties across two regulatory regimes, React web app with 15 screens.
 - Front Office core, POS + recipes + inventory + procurement, activities, compliance ledger, channels bridge,
   guest journey, reputation, pricing calculator, webhooks, audit log, multi-property reporting.

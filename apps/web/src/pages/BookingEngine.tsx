@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { api } from '../api';
-import { Async, Badge, Button, Card, Empty, Field, Input, KeyValue, PageHeader, Textarea } from '../components/ui';
+import { Async, Badge, Button, Card, Empty, Field, Input, KeyValue, PageHeader, Textarea, clickable } from '../components/ui';
 import { useProperty, useToast } from '../context';
 import { addDays, day, diffDays, money } from '../format';
 import { useApi } from '../hooks';
@@ -153,7 +153,7 @@ export function BookingEnginePage() {
                             </div>
                             <div className="stack" style={{ gap: 6 }}>
                               {rt.offers.map((o) => (
-                                <div key={o.ratePlanId} className={`offer ${pick?.offer.ratePlanId === o.ratePlanId && pick.roomTypeId === rt.roomTypeId ? 'selected' : ''}`} onClick={() => setPick({ roomTypeId: rt.roomTypeId, roomTypeName: rt.name, offer: o })}>
+                                <div key={o.ratePlanId} className={`offer ${pick?.offer.ratePlanId === o.ratePlanId && pick.roomTypeId === rt.roomTypeId ? 'selected' : ''}`} {...clickable(() => setPick({ roomTypeId: rt.roomTypeId, roomTypeName: rt.name, offer: o }))}>
                                   <div>
                                     <div className="strong">{o.name}</div>
                                     <div className="small muted">

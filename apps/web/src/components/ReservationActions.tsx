@@ -107,7 +107,9 @@ export function ReservationActions({ reservation: r, onChanged, compact }: { res
             No-show
           </Button>
         )}
-        {(r.status === 'CONFIRMED' || r.status === 'CHECKED_IN') && (
+        {/* Only a confirmed stay can be cancelled; the API rejects it once the guest is in
+            house, so offering it there produced a guaranteed error. Check out instead. */}
+        {r.status === 'CONFIRMED' && (
           <Button variant="danger" size={compact ? 'sm' : 'md'} busy={busy === 'cancel'} onClick={cancel}>
             Cancel
           </Button>

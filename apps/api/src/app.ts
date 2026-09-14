@@ -3,6 +3,7 @@ import cors from '@fastify/cors';
 import swagger from '@fastify/swagger';
 import swaggerUi from '@fastify/swagger-ui';
 import { Prisma } from '@prisma/client';
+import { initDb } from './db.js';
 import { hasZodFastifySchemaValidationErrors, jsonSchemaTransform, serializerCompiler, validatorCompiler, type ZodTypeProvider } from 'fastify-type-provider-zod';
 import { authPlugin } from './plugins/auth.js';
 import { AppError } from './lib/errors.js';
@@ -24,6 +25,7 @@ import { webhookRoutes } from './routes/webhooks.js';
 import { publicRoutes } from './routes/public.js';
 
 export async function buildApp(opts: { logger?: boolean } = {}) {
+  await initDb();
   const app = Fastify({ logger: opts.logger ?? false }).withTypeProvider<ZodTypeProvider>();
   app.setValidatorCompiler(validatorCompiler);
   app.setSerializerCompiler(serializerCompiler);

@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react';
 import { api, prop } from '../api';
-import { Async, Badge, Button, Card, Drawer, Empty, Field, Input, PageHeader, Select, StatusBadge } from '../components/ui';
+import { Async, Badge, Button, Card, Drawer, Empty, Field, Input, PageHeader, Select, StatusBadge, clickable } from '../components/ui';
 import { useProperty, useToast } from '../context';
 import { day, titleCase } from '../format';
 import { useApi } from '../hooks';
@@ -139,7 +139,7 @@ export function HousekeepingPage() {
                   <div className="floor-title">Floor {floor}</div>
                   <div className="room-grid">
                     {rooms.map((r) => (
-                      <div key={r.roomId} className={`room-card hk-${r.hkStatus} st-${r.status}`} onClick={() => setSelected(r)} role="button">
+                      <div key={r.roomId} className={`room-card hk-${r.hkStatus} st-${r.status}`} {...clickable(() => setSelected(r))}>
                         <div className="room-card-top">
                           <span className="room-number">{r.number}</span>
                           <StatusBadge status={r.status} label={r.status === 'OUT_OF_ORDER' ? 'OOO' : r.status === 'OCCUPIED' ? 'Occ' : r.status === 'VACANT' ? 'Vac' : 'OOS'} />

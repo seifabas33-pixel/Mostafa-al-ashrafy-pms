@@ -1,4 +1,4 @@
-import { useEffect, type ButtonHTMLAttributes, type InputHTMLAttributes, type ReactNode, type SelectHTMLAttributes, type TextareaHTMLAttributes } from 'react';
+import { useEffect, type ButtonHTMLAttributes, type InputHTMLAttributes, type KeyboardEvent as ReactKeyboardEvent, type ReactNode, type SelectHTMLAttributes, type TextareaHTMLAttributes } from 'react';
 import { errorMessage } from '../api';
 import { titleCase } from '../format';
 
@@ -138,7 +138,7 @@ const STATUS_TONE: Record<string, string> = {
   DISABLED: 'grey',
   OK: 'green',
   BOOKED: 'blue',
-  WAITLISTED: 'amber',
+  WAITLIST: 'amber',
   ATTENDED: 'green',
   SCHEDULED: 'blue',
   COMPLETED: 'grey',
@@ -251,4 +251,29 @@ export function JsonView({ value }: { value: unknown }) {
     text = String(value);
   }
   return <pre className="json">{text}</pre>;
+}
+
+/**
+ * Props that make a non-button element operable by keyboard as well as mouse.
+ *
+ * Several surfaces (the rack bars, room cards, session chips, rate-plan offers) are laid
+ * out as divs for styling reasons. Without a tab stop and Enter/Space handling a
+ * keyboard-only user cannot reach them at all, which on a front desk is most of the app.
+ */
+export function clickable(onActivate: () => void, disabled = false) {
+  return {
+    role: 'button' as const,
+    tabIndex: disabled ? -1 : 0,
+    'aria-disabled': disabled || undefined,
+    onClick: () => {
+      if (!disabled) onActivate();
+    },
+    onKeyDown: (e: ReactKeyboardEvent) => {
+      if (disabled) return;
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        onActivate();
+      }
+    },
+  };
 }
